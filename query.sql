@@ -1,6 +1,7 @@
 CREATE DATABASE ticket_app;
 
 CREATE TYPE title_enum AS ENUM ('mr', 'ms', 'mrs');
+
 CREATE TABLE users (
     id VARCHAR(255) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
