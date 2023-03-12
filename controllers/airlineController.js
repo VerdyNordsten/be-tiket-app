@@ -47,6 +47,11 @@ const userController = {
   },
 
   addAirline: async (req, res) => {
+    // Validate Role
+    const { role } = req.payload
+    if (role !== "admin") {
+      return commonHelper.response(res, null, 403, "Only Admin are allowed to add Airline")
+    }
     // Generate Id
     req.body.queryId = uuidv4()
     // Upload to google drive
@@ -83,6 +88,11 @@ const userController = {
   }, 
 
   editAirline: async (req, res) => {
+    // Validate Role
+    const { role } = req.payload
+    if (role !== "admin") {
+      return commonHelper.response(res, null, 403, "Only Admin are allowed to edit Airline")
+    }
     // Set param id as const
     const queryId = req.params.id
     req.body.queryId = queryId
@@ -128,6 +138,11 @@ const userController = {
   },
 
   deleteAirline: async (req, res) => {
+    // Validate Role
+    const { role } = req.payload
+    if (role !== "admin") {
+      return commonHelper.response(res, null, 403, "Only Admin are allowed to delete Airline")
+    }
     // Set param id as const
     const queryId = req.params.id
     // Declare variable for holding query result
