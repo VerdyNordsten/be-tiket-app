@@ -130,6 +130,17 @@ INSERT INTO notifications(id, id_user, title, content, filled)
         (3, 1, 'Sangat Penting', 'Makan', false),
         (4, 3, 'Kurang Penting', 'Buang air', false);
 
+-- Creating table
+CREATE TYPE seat_type AS ENUM ('economy', 'business', 'first class');
+CREATE TABLE seats (
+    id VARCHAR(255) PRIMARY KEY,
+    id_flight VARCHAR(255) REFERENCES flights(id) ON DELETE CASCADE,
+    no_seat VARCHAR(10),
+    type_seat seat_type NOT NULL,
+    filled BOOLEAN DEFAULT FALSE
+);
+
+=======
 -- Create Enum
 CREATE TYPE PASSENGER_TYPE AS ENUM ('child', 'adult');
 -- Creating table
