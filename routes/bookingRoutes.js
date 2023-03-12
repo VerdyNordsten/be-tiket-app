@@ -5,9 +5,6 @@ const router = express.Router()
 // Import controller functions
 const bookingController = require("../controllers/bookingController")
 
-// Import upload
-const upload = require("../middleware/upload.js");
-
 router.get("/", bookingController.getAllBookings)
 router.get("/:id", bookingController.getDetailBooking)
 router.post("/", bookingController.addBooking)

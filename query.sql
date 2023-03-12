@@ -34,9 +34,9 @@ DROP TABLE IF EXISTS airlines;
 -- Creating table Airlines
 CREATE TABLE airlines (
     id CHAR(36) PRIMARY KEY,
-    name VARCHAR(100) NOT NULL UNIQUE, -- note not null
-    photo VARCHAR(100) NOT NULL, -- note not null
-    active BOOLEAN NOT NULL -- note not null
+    name VARCHAR(100) NOT NULL UNIQUE, 
+    photo VARCHAR(100) NOT NULL, 
+    active BOOLEAN NOT NULL
 );
 
 -- Dummy data
@@ -105,3 +105,27 @@ INSERT INTO bookings(id, id_user, id_flight, name_contact, email_contact, phone_
         (3, 1, 1, 'Verdy', 'verdy@gmail.com', 'Saudara Verdy', False, '5', 1, 399999),
         (4, 1, 1, 'Dhimas', 'dhimas@gmail.com', 'Saudara DhimAs', False, '5', 1, 399999);
 
+
+-- Delete table if same name exist
+DROP TABLE IF EXISTS notifications;
+
+-- Creating table
+CREATE TABLE notifications (
+    id CHAR(36) PRIMARY KEY,
+    id_user CHAR(36) NOT NULL, 
+    title VARCHAR(100) NOT NULL, 
+    content VARCHAR(100) NOT NULL, 
+    filled BOOLEAN NOT NULL DEFAULT False
+    -- CONSTRAINT fk_users_id
+    --     FOREIGN KEY (id_user)
+    --     REFERENCES users(id)
+    --     ON DELETE CASCADE
+);
+
+-- Dummy data
+INSERT INTO notifications(id, id_user, title, content, filled) 
+    VALUES
+        (1, 1, 'Penting', 'Harus di tambah relasi', false),
+        (2, 1, 'Tidak Penting', 'Efisiensi', false),
+        (3, 1, 'Sangat Penting', 'Makan', false),
+        (4, 3, 'Kurang Penting', 'Buang air', false);
