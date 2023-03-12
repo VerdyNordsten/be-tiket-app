@@ -73,7 +73,7 @@ const userController = {
       } catch (error) {
         console.log(error)
       }
-      if (error.detail === 'Key (name)=(Aviastar) already exists.') {
+      if (error.detail && error.detail.includes('already exists.')) {
         return commonHelper.response(res, null, 400, "Airline name already exist" )
       } else {
         return commonHelper.response(res, null, 500, "Failed to add airline" )
