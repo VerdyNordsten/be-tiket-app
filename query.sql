@@ -24,8 +24,8 @@ DROP TABLE IF EXISTS airlines;
 
 -- Creating table
 CREATE TABLE airlines (
-    id CHAR(40) PRIMARY KEY,
-    name VARCHAR(100) NOT NULL, -- note not null
+    id CHAR(36) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE, -- note not null
     photo VARCHAR(100) NOT NULL, -- note not null
     active BOOLEAN NOT NULL -- note not null
 );
