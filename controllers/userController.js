@@ -6,6 +6,8 @@ const authHelper = require("../helper/auth")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const saltRounds = 10
+// Import upload google
+const { updatePhoto, uploadPhoto, deletePhoto } = require("../config/googleDrive.config")
 
 const userController = {
   registerUser: async (req, res) => {
@@ -86,14 +88,11 @@ const userController = {
 
   editProfile: async (req, res) => {
     const userId = req.payload.id
-    const { name, password, phone_number } = req.body
-
-    if (req.payload.role !== "worker") {
+    const { name, password, phone, city, address, title, post_code } = req.body
+    if (req.payload.id !== userId) {
       return commonHelper.response(res, null, 401, "You are not authorized to edit this profile")
     }
-
     const dataPw = await userModel.findId(userId)
-
     let newData = {}
     if (name) {
       newData.name = name
@@ -101,23 +100,59 @@ const userController = {
     if (password) {
       newData.password = await bcrypt.hash(password, saltRounds)
     }
-    if (phone_number) {
-      newData.phone_number = phone_number
+    if (phone) {
+      newData.phone = phone
     }
-
+    if (city) {
+      newData.city = city
+    }
+    if (address) {
+      newData.address = address
+    }
+    if (title) {
+      newData.title = title
+    }
+    if (post_code) {
+      newData.post_code = post_code
+    }
+    if (req.file) {
+      try {
+        let oldPhotoId
+        if (dataPw.rows[0].photo !== null) {
+          oldPhotoId = dataPw.rows[0].photo.split("=")[1]
+          await deletePhoto(oldPhotoId)
+        }
+        const parentPath = process.env.GOOGLE_DRIVE_PHOTO_PATH
+        const uploadResult = await uploadPhoto(req.file)
+        const filename = parentPath.concat(uploadResult.id)
+        await updatePhoto(req.file, uploadResult.id)
+        newData.photo = filename
+      } catch (error) {
+        console.log(error)
+        return commonHelper.response(res, null, 500, "Failed to update profile photo")
+      }
+    }
     const updatedData = {
       name: newData.name || dataPw.rows[0].name,
       password: newData.password || dataPw.rows[0].password,
-      phone_number: newData.phone_number || dataPw.rows[0].phone_number,
+      phone: newData.phone || dataPw.rows[0].phone,
+      city: newData.city || dataPw.rows[0].city,
+      address: newData.address || dataPw.rows[0].address,
+      title: newData.title || dataPw.rows[0].title,
+      post_code: newData.post_code || dataPw.rows[0].post_code,
+      photo: newData.photo || dataPw.rows[0].photo,
     }
-
-    await userModel.editProfileWorker(updatedData.name, updatedData.password, updatedData.phone_number, userId)
-
+    await userModel.editProfile(updatedData.name, updatedData.password, updatedData.phone, updatedData.city, updatedData.address, updatedData.title, updatedData.post_code, updatedData.photo, userId)
     const responseData = {
       id: userId,
       name: updatedData.name,
       email: dataPw.rows[0].email,
-      phone_number: updatedData.phone_number,
+      phone: updatedData.phone,
+      city: updatedData.city,
+      address: updatedData.address,
+      title: updatedData.title,
+      post_code: updatedData.post_code,
+      photo: updatedData.photo,
     }
     commonHelper.response(res, responseData, 200, "Edit profile is successful")
   },

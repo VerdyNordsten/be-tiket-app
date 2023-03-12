@@ -8,7 +8,6 @@ const SCOPES = [
   'https://www.googleapis.com/auth/drive.scripts',
   'https://www.googleapis.com/auth/drive.metadata',
 ];
-
 const auth = new google.auth.GoogleAuth({
   credentials: {
     "type": process.env.GOOGLE_DRIVE_TYPE,
