@@ -7,7 +7,7 @@ const {v4: uuidv4} = require("uuid")
 // Import Helper for Template Response
 const commonHelper = require("../helper/common")
 
-const userController = {
+const notificationController = {
   getAllNotifications: async (req, res) => {
     // Declare variable for holding query result
     let selectResult
@@ -47,6 +47,9 @@ const userController = {
       return commonHelper.response(res, insertResult.rows, 200, "Notification added" )
     } catch (error) {
       console.log(error)
+      if (error.detail && error.detail.includes('is not present in table "users".')){
+        return commonHelper.response(res, null, 400, "User id is not present in table users")
+      }
       return commonHelper.response(res, null, 500, "Failed to add notification" )
     }
   }, 
@@ -57,9 +60,15 @@ const userController = {
     req.body.queryId = queryId
     try {
       const insertResult = await notificationModel.updateNotification(req.body)
+      if (insertResult.rowCount < 1){
+        return commonHelper.response(res, null, 404, "Notification not found" )
+      }
       return commonHelper.response(res, insertResult.rows, 200, "Notification edited" )
     } catch (error) {
       console.log(error)
+      if (error.detail && error.detail.includes('is not present in table "users".')){
+        return commonHelper.response(res, null, 400, "User id is not present in table users")
+      }
       return commonHelper.response(res, null, 500, "Failed to update notification" )
     }
   },
@@ -71,6 +80,9 @@ const userController = {
     let deleteResult
     try {
       deleteResult = await notificationModel.deleteNotification(queryId)
+      if (deleteResult.rowCount < 1){
+        return commonHelper.response(res, deleteResult.rows, 404, "Notification not found" )
+      }
       return commonHelper.response(res, deleteResult.rows, 200, "Notification deleted" )
     } catch (error) {
       console.log(error)
@@ -79,4 +91,4 @@ const userController = {
   }
 }
 
-module.exports = userController
+module.exports = notificationController
