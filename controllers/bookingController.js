@@ -7,7 +7,7 @@ const {v4: uuidv4} = require("uuid")
 // Import Helper for Template Response
 const commonHelper = require("../helper/common")
 
-const userController = {
+const bookingController = {
   getAllBookings: async (req, res) => {
     // Declare variable for holding query result
     let selectResult
@@ -57,6 +57,9 @@ const userController = {
     req.body.queryId = queryId
     try {
       const insertResult = await bookingModel.updateBooking(req.body)
+      if (insertResult.rowCount < 1){
+        return commonHelper.response(res, null, 404, "Booking not found" )
+      }
       return commonHelper.response(res, insertResult.rows, 200, "Booking edited" )
     } catch (error) {
       console.log(error)
@@ -71,6 +74,9 @@ const userController = {
     let deleteResult
     try {
       deleteResult = await bookingModel.deleteBooking(queryId)
+      if (deleteResult.rowCount < 1){
+        return commonHelper.response(res, deleteResult.rows, 404, "Booking not found" )
+      }
       return commonHelper.response(res, deleteResult.rows, 200, "Booking deleted" )
     } catch (error) {
       console.log(error)
@@ -79,4 +85,4 @@ const userController = {
   }
 }
 
-module.exports = userController
+module.exports = bookingController

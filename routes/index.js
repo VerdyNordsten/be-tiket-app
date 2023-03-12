@@ -7,6 +7,8 @@ const flightRouter = require("./flightRoutes")
 const bookingRouter = require("./bookingRoutes")
 const notificationRouter = require("./notificationRoutes")
 const seatRouter = require("./seatRoutes")
+const passengerRouter = require("./passengerRoutes")
+const ticketRouter = require("./ticketRoutes")
 
 router.use("/user", userRouter)
 router.use("/admin", adminRouter)
@@ -15,5 +17,7 @@ router.use("/flights", flightRouter)
 router.use("/bookings", bookingRouter)
 router.use("/notifications", notificationRouter)
 router.use("/seats", seatRouter)
+router.use("/passengers", passengerRouter)
+router.use("/tickets", ticketRouter)
 
 module.exports = router

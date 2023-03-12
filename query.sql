@@ -115,11 +115,11 @@ CREATE TABLE notifications (
     id_user CHAR(36) NOT NULL, 
     title VARCHAR(100) NOT NULL, 
     content VARCHAR(100) NOT NULL, 
-    filled BOOLEAN NOT NULL DEFAULT False
-    -- CONSTRAINT fk_users_id
-    --     FOREIGN KEY (id_user)
-    --     REFERENCES users(id)
-    --     ON DELETE CASCADE
+    filled BOOLEAN NOT NULL DEFAULT False,
+    CONSTRAINT fk_users_id
+        FOREIGN KEY (id_user)
+        REFERENCES users(id)
+        ON DELETE CASCADE
 );
 
 -- Dummy data
@@ -139,3 +139,55 @@ CREATE TABLE seats (
     type_seat seat_type NOT NULL,
     filled BOOLEAN DEFAULT FALSE
 );
+
+=======
+-- Create Enum
+CREATE TYPE PASSENGER_TYPE AS ENUM ('child', 'adult');
+-- Creating table
+CREATE TABLE passengers (
+    id CHAR(36) PRIMARY KEY,
+    id_booking CHAR(36) NOT NULL, 
+    name VARCHAR(100) NOT NULL, 
+    category_passenger PASSENGER_TYPE NOT NULL,
+    CONSTRAINT fk_bookings_id
+        FOREIGN KEY (id_booking)
+        REFERENCES bookings(id)
+        ON DELETE CASCADE
+);
+
+-- Dummy data
+INSERT INTO passengers(id, id_booking, name, category_passenger) 
+    VALUES
+        (1, 1, 'Hani', 'child'),
+        (2, 1, 'Yudi', 'adult'),
+        (3, 1, 'Herman', 'adult');
+
+-- Creating table
+CREATE TABLE tickets (
+    id CHAR(36) PRIMARY KEY,
+    id_booking CHAR(36) NOT NULL, 
+    id_seat VARCHAR(36) NOT NULL, 
+    code VARCHAR(20),
+    CONSTRAINT fk_bookings_id
+        FOREIGN KEY (id_booking)
+        REFERENCES bookings(id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_seats_id
+        FOREIGN KEY (id_seat)
+        REFERENCES seats(id)
+        ON DELETE CASCADE
+);
+
+-- Dummy data
+INSERT INTO tickets(id, id_booking, id_seat, code) 
+    VALUES
+        (1, 1, 1, 'AB220'),
+        (2, 1, 1, 'BA234'),
+        (3, 1, 1, 'AS342');
+
+-- Dummy data
+INSERT INTO seats(id) 
+    VALUES
+        (1),
+        (2),
+        (3);
