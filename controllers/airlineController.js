@@ -50,8 +50,9 @@ const userController = {
     // Generate Id
     req.body.queryId = uuidv4()
     // Upload to google drive
+    let uploadResult
     try {
-      const uploadResult = await uploadPhoto(req.file);
+      uploadResult = await uploadPhoto(req.file);
       const parentPath = process.env.GOOGLE_DRIVE_PHOTO_PATH;
       req.body.queryFilename = parentPath.concat(uploadResult.id);
     } catch (error) {
@@ -65,7 +66,18 @@ const userController = {
       insertResult = await airlineModel.insertAirline(req.body)
     } catch (error) {
       console.log(error)
-      return commonHelper.response(res, insertResult.rows, 500, "Failed to add airline" )
+      try {
+        if (uploadResult){
+          deletePhoto(uploadResult.id)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+      if (error.detail === 'Key (name)=(Aviastar) already exists.') {
+        return commonHelper.response(res, null, 400, "Airline name already exist" )
+      } else {
+        return commonHelper.response(res, null, 500, "Failed to add airline" )
+      }
     }
     return commonHelper.response(res, insertResult.rows, 200, "Airline added" )
   }, 
