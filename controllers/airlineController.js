@@ -22,7 +22,7 @@ const userController = {
       selectResult = await airlineModel.selectAllAirlines()
     } catch (error) {
       console.log(error)
-      return commonHelper.response(res, selectResult.rows, 500, "Failed to get all airlines" )
+      return commonHelper.response(res, null, 500, "Failed to get all airlines" )
     }
     return commonHelper.response(res, selectResult.rows, 200, "Get all airlines success" )
   },
