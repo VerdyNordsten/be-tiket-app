@@ -134,7 +134,7 @@ INSERT INTO notifications(id, id_user, title, content, filled)
 CREATE TYPE seat_type AS ENUM ('economy', 'business', 'first class');
 CREATE TABLE seats (
     id VARCHAR(255) PRIMARY KEY,
-    id_flight VARCHAR(255) REFERENCES flights(id),
+    id_flight VARCHAR(255) REFERENCES flights(id) ON DELETE CASCADE,
     no_seat VARCHAR(10),
     type_seat seat_type NOT NULL,
     filled BOOLEAN DEFAULT FALSE
