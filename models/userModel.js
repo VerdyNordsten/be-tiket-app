@@ -12,11 +12,11 @@ const insertUser = async (data) => {
   return await Pool.query("INSERT INTO users (id, name, email, password) VALUES ($1, $2, $3, $4)", [data.id, data.name, data.email, data.password])
 }
 
-const editProfile = (name, password, phone_number, id) => {
+const editProfile = (name, password, phone, city, address, title, post_code, photo, id) => {
   return new Promise((resolve, reject) => {
     const query = {
-      text: "UPDATE users SET name=$1, password=$2, phone_number=$3 WHERE id=$4",
-      values: [name, password, phone_number, id],
+      text: "UPDATE users SET name=$1, password=$2, phone=$3, city=$4, address=$5, title=$6, post_code=$7, photo=$8 WHERE id=$9",
+      values: [name, password, phone, city, address, title, post_code, photo, id],
     }
     Pool.query(query, (error, result) => {
       if (!error) {
