@@ -13,9 +13,7 @@ const adminController = {
       const { username, email, password, phone } = req.body
       const checkEmail = await adminModel.findEmail(email)
       if (checkEmail.rowCount > 0) {
-        return res.json({
-          message: "Email already exist",
-        })
+        return commonHelper.response(res, null, 409, "Email already exist" )
       }
       const hashPassword = await bcrypt.hash(password, saltRounds)
       const id = uuid.v4()
@@ -27,9 +25,10 @@ const adminController = {
         phone,
       }
       const result = await adminModel.insertAdmin(data)
-      commonHelper.response(res, result.rows, 201, "Register admin has been success")
+      return commonHelper.response(res, result.rows, 201, "Register admin has been success")
     } catch (err) {
-      res.send(err)
+      console.log(err)
+      return commonHelper.response(res, null, 500, "Failed to register" )
     }
   },
 
@@ -40,15 +39,11 @@ const adminController = {
         rows: [user],
       } = await adminModel.findEmail(email)
       if (!user) {
-        return res.json({
-          message: "Email is invalid",
-        })
+        return commonHelper.response(res, null, 401, "Email is invalid" )
       }
       const isValidPassword = bcrypt.compareSync(password, user.password)
       if (!isValidPassword) {
-        return res.json({
-          message: "Password is invalid",
-        })
+        return commonHelper.response(res, null, 401, "Password is invalid" )
       }
       delete user.password
       let payload = {
@@ -58,9 +53,10 @@ const adminController = {
       }
       user.token = authHelper.generateToken(payload)
       user.refreshToken = authHelper.generateRefreshToken(payload)
-      commonHelper.response(res, user, 201, "Login admin is successful")
+      return commonHelper.response(res, user, 201, "Login admin is successful")
     } catch (err) {
-      res.send(err)
+      console.log(err)
+      return commonHelper.response(res, null, 500, "Failed to login" )
     }
   },
 
@@ -74,7 +70,7 @@ const adminController = {
       token: authHelper.generateToken(payload),
       refreshToken: authHelper.generateRefreshToken(payload),
     }
-    commonHelper.response(res, result, 200, "Get refresh token is successful")
+    return commonHelper.response(res, result, 200, "Get refresh token is successful")
   },
 
   profileAdmin: async (req, res) => {
@@ -83,7 +79,7 @@ const adminController = {
       rows: [user],
     } = await adminModel.findEmail(email)
     delete user.password
-    commonHelper.response(res, user, 200, "Get data admin is successful")
+    return commonHelper.response(res, user, 200, "Get data admin is successful")
   },
 }
 

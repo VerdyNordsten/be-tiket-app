@@ -87,7 +87,7 @@ const ticketController = {
     try {
       deleteResult = await ticketModel.deleteTicket(queryId)
       if (deleteResult.rowCount < 1){
-        return commonHelper.response(res, deleteResult.rows, 404, "Ticket not found" )
+        return commonHelper.response(res, null, 404, "Ticket not found" )
       }
       return commonHelper.response(res, deleteResult.rows, 200, "Ticket deleted" )
     } catch (error) {
