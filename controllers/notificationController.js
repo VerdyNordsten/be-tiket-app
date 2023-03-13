@@ -81,7 +81,7 @@ const notificationController = {
     try {
       deleteResult = await notificationModel.deleteNotification(queryId)
       if (deleteResult.rowCount < 1){
-        return commonHelper.response(res, deleteResult.rows, 404, "Notification not found" )
+        return commonHelper.response(res, null, 404, "Notification not found" )
       }
       return commonHelper.response(res, deleteResult.rows, 200, "Notification deleted" )
     } catch (error) {

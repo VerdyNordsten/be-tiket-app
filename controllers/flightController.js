@@ -166,6 +166,9 @@ const flightController = {
       return commonHelper.response(res, null, 403, "Only Admin are allowed to update Flight")
     }
     const dataPw = await flightModel.findFlightId(id)
+    if (dataPw.rowCount < 1){
+      return commonHelper.response(res, null, 404, "Flight not found")
+    }
     let newData = {}
     if (departure_date) {
       newData.departure_date = departure_date

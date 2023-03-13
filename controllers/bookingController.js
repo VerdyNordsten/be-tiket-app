@@ -47,6 +47,12 @@ const bookingController = {
       return commonHelper.response(res, insertResult.rows, 200, "Booking added" )
     } catch (error) {
       console.log(error)
+      if (error.detail && error.detail.includes('is not present in table "users".')){
+        return commonHelper.response(res, null, 400, "User id is not present in table users")
+      }
+      if (error.detail && error.detail.includes('is not present in table "flights".')){
+        return commonHelper.response(res, null, 400, "Flight id is not present in table flights")
+      }
       return commonHelper.response(res, null, 500, "Failed to add booking" )
     }
   }, 
@@ -63,6 +69,12 @@ const bookingController = {
       return commonHelper.response(res, insertResult.rows, 200, "Booking edited" )
     } catch (error) {
       console.log(error)
+      if (error.detail && error.detail.includes('is not present in table "users".')){
+        return commonHelper.response(res, null, 400, "User id is not present in table users")
+      }
+      if (error.detail && error.detail.includes('is not present in table "flights".')){
+        return commonHelper.response(res, null, 400, "Flight id is not present in table flights")
+      }
       return commonHelper.response(res, null, 500, "Failed to update booking" )
     }
   },
@@ -75,7 +87,7 @@ const bookingController = {
     try {
       deleteResult = await bookingModel.deleteBooking(queryId)
       if (deleteResult.rowCount < 1){
-        return commonHelper.response(res, deleteResult.rows, 404, "Booking not found" )
+        return commonHelper.response(res, null, 404, "Booking not found" )
       }
       return commonHelper.response(res, deleteResult.rows, 200, "Booking deleted" )
     } catch (error) {

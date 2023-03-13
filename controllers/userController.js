@@ -15,7 +15,7 @@ const userController = {
       const { name, email, password } = req.body
       const checkEmail = await userModel.findEmail(email)
       if (checkEmail.rowCount > 0) {
-        return commonHelper.response(res, deleteResult.rows, 409, "Email already exist" )
+        return commonHelper.response(res, null, 409, "Email already exist" )
       }
       const hashPassword = await bcrypt.hash(password, saltRounds)
       const id = uuid.v4()

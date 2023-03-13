@@ -15,7 +15,7 @@ const seatController = {
 
       const result = await seatModel.selectAllSeatByFlightId(id_flight, limit, offset, searchParam, sortBY, sort)
       if (result.rowCount === 0) {
-        return commonHelper.response(res, null, 404, "Data not found" )
+        return commonHelper.response(res, null, 404, "Flight not found" )
       }
       const {
         rows: [count],
@@ -51,7 +51,7 @@ const seatController = {
       const id = req.params.id
       const { rows, rowCount } = await seatModel.findSeatWithFlight(id)
       if (!rowCount) {
-        return commonHelper.response(res, null, 404, "Data not found" )
+        return commonHelper.response(res, null, 404, "Seat not found" )
       }
       const { id_flight, name_airline, no_seat, type_seat, filled } = rows[0]
       const data = {
@@ -111,6 +111,9 @@ const seatController = {
       }
     } catch (error) {
       console.error(error)
+      if (error.detail && error.detail.includes('is not present in table "flights".')){
+        return commonHelper.response(res, null, 400, "Flight id is not present in table flights")
+      }
       return commonHelper.response(res, null, 500, "Failed to create multiple seats")
     }
   },
@@ -123,6 +126,9 @@ const seatController = {
       return commonHelper.response(res, null, 403, "Only Admin are allowed to update Seat")
     }
     const dataPw = await seatModel.findSeatId(id)
+    if (dataPw.rowCount < 1){
+      return commonHelper.response(res, null, 404, "Seat not found")
+    }
     let newData = {}
     if (no_seat) {
       newData.no_seat = no_seat

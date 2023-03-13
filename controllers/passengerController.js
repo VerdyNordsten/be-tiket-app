@@ -81,7 +81,7 @@ const passengerController = {
     try {
       deleteResult = await passengerModel.deletePassenger(queryId)
       if (deleteResult.rowCount < 1){
-        return commonHelper.response(res, deleteResult.rows, 404, "Passenger not found" )
+        return commonHelper.response(res, null, 404, "Passenger not found" )
       }
       return commonHelper.response(res, deleteResult.rows, 200, "Passenger deleted" )
     } catch (error) {
