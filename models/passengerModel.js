@@ -9,17 +9,17 @@ const selectDetailPassenger = (queryId) => {
 }
 
 const insertPassenger = (queryObject) => {
-  const { queryId, id_booking, name, category_passenger } = queryObject
+  const { queryId, id_booking, id_seat, name, category_passenger } = queryObject
   return Pool.query(
       `INSERT INTO passengers(id, id_booking, name, category_passenger) ` +
-      `VALUES('${queryId}', '${id_booking}', '${name}', '${category_passenger}')`
+      `VALUES('${queryId}', '${id_booking}', '${id_seat}' '${name}', '${category_passenger}')`
   );
 }
 
 const updatePassenger = (queryObject) => {
-  const { queryId, id_booking, name, category_passenger } = queryObject
+  const { queryId, id_booking, id_seat, name, category_passenger } = queryObject
   return Pool.query(
-      `UPDATE passengers SET id_booking='${id_booking}', name='${name}',` +
+      `UPDATE passengers SET id_booking='${id_booking}', name='${name}', id_seat='${id_seat}'` +
       `category_passenger='${category_passenger}' WHERE id='${queryId}'`
   );
 }
