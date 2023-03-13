@@ -40,11 +40,15 @@ const bookingController = {
   },
 
   addBooking: async (req, res) => {
+    // Use token as replacement for user id
+    if (req.payload.role && req.payload.role === "user"){
+      req.body.id_user = req.payload.id
+    }
     // Generate Id
     req.body.queryId = uuidv4()
     try {
       const insertResult = await bookingModel.insertBooking(req.body)
-      return commonHelper.response(res, insertResult.rows, 200, "Booking added" )
+      return commonHelper.response(res, req.body, 200, "Booking added" )
     } catch (error) {
       console.log(error)
       if (error.detail && error.detail.includes('is not present in table "users".')){
@@ -58,6 +62,11 @@ const bookingController = {
   }, 
 
   editBooking: async (req, res) => {
+    // Validate Role
+    const { role } = req.payload
+    if (role !== "admin") {
+      return commonHelper.response(res, null, 403, "Only Admin are allowed to edit Booking")
+    }
     // Set param id as const
     const queryId = req.params.id
     req.body.queryId = queryId
@@ -80,6 +89,11 @@ const bookingController = {
   },
 
   deleteBooking: async (req, res) => {
+    // Validate Role
+    const { role } = req.payload
+    if (role !== "admin") {
+      return commonHelper.response(res, null, 403, "Only Admin are allowed to delete Booking")
+    }
     // Set param id as const
     const queryId = req.params.id
     // Declare variable for holding query result

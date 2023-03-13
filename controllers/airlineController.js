@@ -109,23 +109,27 @@ const userController = {
     }
     // Update the old photo
     const oldPhoto = selectResult.rows[0].photo;
-    try {
-      if (oldPhoto != "undefined" && oldPhoto != "photo.jpg" && oldPhoto != "") {
-        const oldPhotoId = oldPhoto.split("=")[1];
-        const updateResult = await updatePhoto(
-            req.file,
-            oldPhotoId
-        );
-        const parentPath = process.env.GOOGLE_DRIVE_PHOTO_PATH;
-        req.body.queryFilename = parentPath.concat(updateResult.id);
-      } else {
-        const uploadResult = await uploadPhoto(req.file);
-        const parentPath = process.env.GOOGLE_DRIVE_PHOTO_PATH;
-        req.body.queryFilename = parentPath.concat(uploadResult.id);
+    if (req.file){
+      try {
+        if (oldPhoto != "undefined" && oldPhoto != "photo.jpg" && oldPhoto != "") {
+          const oldPhotoId = oldPhoto.split("=")[1];
+          const updateResult = await updatePhoto(
+              req.file,
+              oldPhotoId
+          );
+          const parentPath = process.env.GOOGLE_DRIVE_PHOTO_PATH;
+          req.body.queryFilename = parentPath.concat(updateResult.id);
+        } else {
+          const uploadResult = await uploadPhoto(req.file);
+          const parentPath = process.env.GOOGLE_DRIVE_PHOTO_PATH;
+          req.body.queryFilename = parentPath.concat(uploadResult.id);
+        }
+      } catch (error) {
+        console.log(error)
+        return commonHelper.response(res, null, 500, "Failed to update airline photo" )
       }
-    } catch (error) {
-      console.log(error)
-      return commonHelper.response(res, null, 500, "Failed to update airline photo" )
+    } else {
+      req.body.queryFilename = oldPhoto
     }
     // Update other field
     try {

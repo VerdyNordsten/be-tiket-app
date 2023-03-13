@@ -39,15 +39,6 @@ CREATE TABLE airlines (
     active BOOLEAN NOT NULL
 );
 
--- -- Dummy data
--- INSERT INTO airlines(id, name, photo, active) 
---     VALUES
---         (1, 'Adam Air', 'photo.jpg', True),
---         (2, 'Aviastar', 'photo.jpg', True),
---         (3, 'Batavia Air', 'photo.jpg', True),
---         (4, 'Batik Air', 'photo.jpg', True),
---         (5, 'Citilink', 'photo.jpg', True);
-
 -- Create Table Flights
 CREATE TYPE trip_type AS ENUM ('one way', 'rounded trip');
 CREATE TYPE class_type AS ENUM ('economy', 'business', 'first class');
@@ -97,15 +88,6 @@ CREATE TABLE bookings (
         REFERENCES flights(id)
 );
 
--- -- Dummy data
--- INSERT INTO bookings(id, id_user, id_flight, name_contact, email_contact, phone_contact, insurance, capacity, status, total_price) 
---     VALUES
---         (1, 1, 1, 'Ikkair', 'ikkair@gmail.com', 'Saudara Ikkair', True, '4', 2, 40000),
---         (2, 1, 1, 'Ilham', 'ilham@gmail.com', 'Saudara Ilham', False, '5', 1, 300000),
---         (3, 1, 1, 'Verdy', 'verdy@gmail.com', 'Saudara Verdy', False, '5', 1, 399999),
---         (4, 1, 1, 'Dhimas', 'dhimas@gmail.com', 'Saudara DhimAs', False, '5', 1, 399999);
-
-
 -- Delete table if same name exist
 DROP TABLE IF EXISTS notifications;
 
@@ -121,14 +103,6 @@ CREATE TABLE notifications (
         REFERENCES users(id)
         ON DELETE CASCADE
 );
-
--- -- Dummy data
--- INSERT INTO notifications(id, id_user, title, content, filled) 
---     VALUES
---         (1, 1, 'Penting', 'Harus di tambah relasi', false),
---         (2, 1, 'Tidak Penting', 'Efisiensi', false),
---         (3, 1, 'Sangat Penting', 'Makan', false),
---         (4, 3, 'Kurang Penting', 'Buang air', false);
 
 -- Creating table
 CREATE TYPE seat_type AS ENUM ('economy', 'business', 'first class');
@@ -146,27 +120,9 @@ CREATE TYPE PASSENGER_TYPE AS ENUM ('child', 'adult');
 CREATE TABLE passengers (
     id CHAR(36) PRIMARY KEY,
     id_booking CHAR(36) NOT NULL, 
+    id_seat CHAR(36) NOT NULL, 
     name VARCHAR(100) NOT NULL, 
     category_passenger PASSENGER_TYPE NOT NULL,
-    CONSTRAINT fk_bookings_id
-        FOREIGN KEY (id_booking)
-        REFERENCES bookings(id)
-        ON DELETE CASCADE
-);
-
--- -- Dummy data
--- INSERT INTO passengers(id, id_booking, name, category_passenger) 
---     VALUES
---         (1, 1, 'Hani', 'child'),
---         (2, 1, 'Yudi', 'adult'),
---         (3, 1, 'Herman', 'adult');
-
--- Creating table
-CREATE TABLE tickets (
-    id CHAR(36) PRIMARY KEY,
-    id_booking CHAR(36) NOT NULL, 
-    id_seat VARCHAR(36) NOT NULL, 
-    code VARCHAR(20),
     CONSTRAINT fk_bookings_id
         FOREIGN KEY (id_booking)
         REFERENCES bookings(id)
@@ -174,12 +130,15 @@ CREATE TABLE tickets (
     CONSTRAINT fk_seats_id
         FOREIGN KEY (id_seat)
         REFERENCES seats(id)
-        ON DELETE CASCADE
 );
 
--- -- Dummy data
--- INSERT INTO tickets(id, id_booking, id_seat, code) 
---     VALUES
---         (1, 1, 1, 'AB220'),
---         (2, 1, 1, 'BA234'),
---         (3, 1, 1, 'AS342');
+-- Creating table
+CREATE TABLE tickets (
+    id CHAR(36) PRIMARY KEY,
+    id_passenger CHAR(36) NOT NULL, 
+    code VARCHAR(20),
+    CONSTRAINT fk_passengers_id
+        FOREIGN KEY (id_passenger)
+        REFERENCES passengers(id)
+        ON DELETE CASCADE
+);

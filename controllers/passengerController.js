@@ -50,6 +50,9 @@ const passengerController = {
       if (error.detail && error.detail.includes('is not present in table "bookings".')){
         return commonHelper.response(res, null, 400, "Booking id is not present in table bookings")
       }
+      if (error.detail && error.detail.includes('is not present in table "seats".')){
+        return commonHelper.response(res, null, 400, "Seat id is not present in table seats")
+      }
       return commonHelper.response(res, null, 500, "Failed to add passenger" )
     }
   }, 
@@ -68,6 +71,9 @@ const passengerController = {
       console.log(error)
       if (error.detail && error.detail.includes('is not present in table "bookings".')){
         return commonHelper.response(res, null, 400, "Booking id is not present in table bookings")
+      }
+      if (error.detail && error.detail.includes('is not present in table "seats".')){
+        return commonHelper.response(res, null, 400, "Seat id is not present in table seats")
       }
       return commonHelper.response(res, null, 500, "Failed to update passenger" )
     }
