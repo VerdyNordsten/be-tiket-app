@@ -5,11 +5,11 @@ CREATE DATABASE ticket_app;
 -- Create Table User
 CREATE TYPE title_enum AS ENUM ('mr', 'ms', 'mrs');
 CREATE TABLE users (
-    id VARCHAR(255) PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    id CHAR(36) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    phone VARCHAR(255),
+    password CHAR(60) NOT NULL,
+    phone VARCHAR(100),
     city VARCHAR(100),
     address TEXT,
     title title_enum,
@@ -20,11 +20,11 @@ CREATE TABLE users (
 
 -- Create Table Admin 
 CREATE TABLE admin (
-    id VARCHAR(255) PRIMARY KEY,
-    username VARCHAR(255),
+    id CHAR(36) PRIMARY KEY,
+    username VARCHAR(100),
     email VARCHAR(100) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    phone VARCHAR(255),
+    password CHAR(60) NOT NULL,
+    phone VARCHAR(100),
     role VARCHAR(20) DEFAULT 'admin'
 );
 
@@ -39,28 +39,28 @@ CREATE TABLE airlines (
     active BOOLEAN NOT NULL
 );
 
--- Dummy data
-INSERT INTO airlines(id, name, photo, active) 
-    VALUES
-        (1, 'Adam Air', 'photo.jpg', True),
-        (2, 'Aviastar', 'photo.jpg', True),
-        (3, 'Batavia Air', 'photo.jpg', True),
-        (4, 'Batik Air', 'photo.jpg', True),
-        (5, 'Citilink', 'photo.jpg', True);
+-- -- Dummy data
+-- INSERT INTO airlines(id, name, photo, active) 
+--     VALUES
+--         (1, 'Adam Air', 'photo.jpg', True),
+--         (2, 'Aviastar', 'photo.jpg', True),
+--         (3, 'Batavia Air', 'photo.jpg', True),
+--         (4, 'Batik Air', 'photo.jpg', True),
+--         (5, 'Citilink', 'photo.jpg', True);
 
 -- Create Table Flights
 CREATE TYPE trip_type AS ENUM ('one way', 'rounded trip');
 CREATE TYPE class_type AS ENUM ('economy', 'business', 'first class');
 CREATE TYPE transit_type AS ENUM ('direct', 'transit');
 CREATE TABLE flights (
-    id VARCHAR(255) PRIMARY KEY,
-    id_airline VARCHAR(255) REFERENCES airlines(id),
+    id CHAR(36) PRIMARY KEY,
+    id_airline CHAR(36) REFERENCES airlines(id),
     departure_date DATE NOT NULL,
     departure_time TIME NOT NULL,
     arrived_date DATE NOT NULL,
     arrived_time TIME NOT NULL,
-    starting_place VARCHAR(255) NOT NULL,
-    destination_place VARCHAR(255) NOT NULL,
+    starting_place VARCHAR(100) NOT NULL,
+    destination_place VARCHAR(100) NOT NULL,
     transit transit_type NOT NULL,
     luggage BOOLEAN DEFAULT FALSE,
     meal BOOLEAN DEFAULT FALSE,
@@ -97,13 +97,13 @@ CREATE TABLE bookings (
         REFERENCES flights(id)
 );
 
--- Dummy data
-INSERT INTO bookings(id, id_user, id_flight, name_contact, email_contact, phone_contact, insurance, capacity, status, total_price) 
-    VALUES
-        (1, 1, 1, 'Ikkair', 'ikkair@gmail.com', 'Saudara Ikkair', True, '4', 2, 40000),
-        (2, 1, 1, 'Ilham', 'ilham@gmail.com', 'Saudara Ilham', False, '5', 1, 300000),
-        (3, 1, 1, 'Verdy', 'verdy@gmail.com', 'Saudara Verdy', False, '5', 1, 399999),
-        (4, 1, 1, 'Dhimas', 'dhimas@gmail.com', 'Saudara DhimAs', False, '5', 1, 399999);
+-- -- Dummy data
+-- INSERT INTO bookings(id, id_user, id_flight, name_contact, email_contact, phone_contact, insurance, capacity, status, total_price) 
+--     VALUES
+--         (1, 1, 1, 'Ikkair', 'ikkair@gmail.com', 'Saudara Ikkair', True, '4', 2, 40000),
+--         (2, 1, 1, 'Ilham', 'ilham@gmail.com', 'Saudara Ilham', False, '5', 1, 300000),
+--         (3, 1, 1, 'Verdy', 'verdy@gmail.com', 'Saudara Verdy', False, '5', 1, 399999),
+--         (4, 1, 1, 'Dhimas', 'dhimas@gmail.com', 'Saudara DhimAs', False, '5', 1, 399999);
 
 
 -- Delete table if same name exist
@@ -122,25 +122,24 @@ CREATE TABLE notifications (
         ON DELETE CASCADE
 );
 
--- Dummy data
-INSERT INTO notifications(id, id_user, title, content, filled) 
-    VALUES
-        (1, 1, 'Penting', 'Harus di tambah relasi', false),
-        (2, 1, 'Tidak Penting', 'Efisiensi', false),
-        (3, 1, 'Sangat Penting', 'Makan', false),
-        (4, 3, 'Kurang Penting', 'Buang air', false);
+-- -- Dummy data
+-- INSERT INTO notifications(id, id_user, title, content, filled) 
+--     VALUES
+--         (1, 1, 'Penting', 'Harus di tambah relasi', false),
+--         (2, 1, 'Tidak Penting', 'Efisiensi', false),
+--         (3, 1, 'Sangat Penting', 'Makan', false),
+--         (4, 3, 'Kurang Penting', 'Buang air', false);
 
 -- Creating table
 CREATE TYPE seat_type AS ENUM ('economy', 'business', 'first class');
 CREATE TABLE seats (
-    id VARCHAR(255) PRIMARY KEY,
-    id_flight VARCHAR(255) REFERENCES flights(id) ON DELETE CASCADE,
+    id CHAR(36) PRIMARY KEY,
+    id_flight CHAR(36) REFERENCES flights(id) ON DELETE CASCADE,
     no_seat VARCHAR(10),
     type_seat seat_type NOT NULL,
     filled BOOLEAN DEFAULT FALSE
 );
 
-=======
 -- Create Enum
 CREATE TYPE PASSENGER_TYPE AS ENUM ('child', 'adult');
 -- Creating table
@@ -155,12 +154,12 @@ CREATE TABLE passengers (
         ON DELETE CASCADE
 );
 
--- Dummy data
-INSERT INTO passengers(id, id_booking, name, category_passenger) 
-    VALUES
-        (1, 1, 'Hani', 'child'),
-        (2, 1, 'Yudi', 'adult'),
-        (3, 1, 'Herman', 'adult');
+-- -- Dummy data
+-- INSERT INTO passengers(id, id_booking, name, category_passenger) 
+--     VALUES
+--         (1, 1, 'Hani', 'child'),
+--         (2, 1, 'Yudi', 'adult'),
+--         (3, 1, 'Herman', 'adult');
 
 -- Creating table
 CREATE TABLE tickets (
@@ -178,16 +177,9 @@ CREATE TABLE tickets (
         ON DELETE CASCADE
 );
 
--- Dummy data
-INSERT INTO tickets(id, id_booking, id_seat, code) 
-    VALUES
-        (1, 1, 1, 'AB220'),
-        (2, 1, 1, 'BA234'),
-        (3, 1, 1, 'AS342');
-
--- Dummy data
-INSERT INTO seats(id) 
-    VALUES
-        (1),
-        (2),
-        (3);
+-- -- Dummy data
+-- INSERT INTO tickets(id, id_booking, id_seat, code) 
+--     VALUES
+--         (1, 1, 1, 'AB220'),
+--         (2, 1, 1, 'BA234'),
+--         (3, 1, 1, 'AS342');
