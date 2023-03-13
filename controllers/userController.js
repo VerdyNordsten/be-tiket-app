@@ -15,9 +15,7 @@ const userController = {
       const { name, email, password } = req.body
       const checkEmail = await userModel.findEmail(email)
       if (checkEmail.rowCount > 0) {
-        return res.json({
-          message: "Email already exist",
-        })
+        return commonHelper.response(res, deleteResult.rows, 409, "Email already exist" )
       }
       const hashPassword = await bcrypt.hash(password, saltRounds)
       const id = uuid.v4()
@@ -28,9 +26,10 @@ const userController = {
         password: hashPassword,
       }
       const result = await userModel.insertUser(data)
-      commonHelper.response(res, result.rows, 201, "Register has been success")
+      return commonHelper.response(res, result.rows, 201, "Register has been success")
     } catch (err) {
-      res.send(err)
+      console.log(err)
+      return commonHelper.response(res, null, 500, "Failed to register")
     }
   },
 
@@ -41,15 +40,11 @@ const userController = {
         rows: [user],
       } = await userModel.findEmail(email)
       if (!user) {
-        return res.json({
-          message: "Email is invalid",
-        })
+        return commonHelper.response(res, null, 401, "Email is invalid" )
       }
       const isValidPassword = bcrypt.compareSync(password, user.password)
       if (!isValidPassword) {
-        return res.json({
-          message: "Password is invalid",
-        })
+        return commonHelper.response(res, null, 401, "Password is invalid" )
       }
       delete user.password
       let payload = {
@@ -58,9 +53,10 @@ const userController = {
       }
       user.token = authHelper.generateToken(payload)
       user.refreshToken = authHelper.generateRefreshToken(payload)
-      commonHelper.response(res, user, 201, "Login is successful")
+      return commonHelper.response(res, user, 201, "Login is successful")
     } catch (err) {
-      res.send(err)
+      console.log(err)
+      return commonHelper.response(res, null, 500, "Failed to login")
     }
   },
 
@@ -74,7 +70,7 @@ const userController = {
       token: authHelper.generateToken(payload),
       refreshToken: authHelper.generateRefreshToken(payload),
     }
-    commonHelper.response(res, result, 200, "Get refresh token is successful")
+    return commonHelper.response(res, result, 200, "Get refresh token is successful")
   },
 
   profileUser: async (req, res) => {
@@ -83,7 +79,7 @@ const userController = {
       rows: [user],
     } = await userModel.findEmail(email)
     delete user.password
-    commonHelper.response(res, user, 200, "Get data profile is successful")
+    return commonHelper.response(res, user, 200, "Get data profile is successful")
   },
 
   editProfile: async (req, res) => {
@@ -154,7 +150,7 @@ const userController = {
       post_code: updatedData.post_code,
       photo: updatedData.photo,
     }
-    commonHelper.response(res, responseData, 200, "Edit profile is successful")
+    return commonHelper.response(res, responseData, 200, "Edit profile is successful")
   },
 }
 

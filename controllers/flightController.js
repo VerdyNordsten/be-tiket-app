@@ -14,9 +14,7 @@ const flightController = {
       const searchParam = req.query.search ? req.query.search.toLowerCase() : ""
       const result = await flightModel.selectAllFlight(limit, offset, searchParam, sortBY, sort)
       if (result.rowCount === 0) {
-        return res.json({
-          message: "Data not found",
-        })
+        return commonHelper.response(res, null, 404, "Data not found" )
       }
       const {
         rows: [count],
@@ -60,6 +58,7 @@ const flightController = {
       )
     } catch (error) {
       console.log(error)
+      return commonHelper.response(res, null, 500, "Failed to get all flights" )
     }
   },
 
@@ -68,9 +67,7 @@ const flightController = {
       const id = req.params.id
       const { rows, rowCount } = await flightModel.findFlightWithAirline(id)
       if (!rowCount) {
-        return res.json({
-          Message: "Data not found",
-        })
+        return commonHelper.response(res, null, 404, "Data not found" )
       }
       const { id_airline, departure_date, departure_time, arrived_date, arrived_time, starting_place, destination_place, transit, luggage, meal, wifi, class_flight, type_trip, capacity, terminal, gate, price, name_airline, image_airline } = rows[0]
       const dep_time = moment(departure_time, "HH:mm")
@@ -106,9 +103,10 @@ const flightController = {
         gate,
         price,
       }
-      commonHelper.response(res, data, 200, "Get detail flight success")
+      return commonHelper.response(res, data, 200, "Get detail flight success")
     } catch (err) {
-      res.json({ message: err.message })
+      console.log(err)
+      return commonHelper.response(res, null, 500, "Failed to get detail flight")
     }
   },
 
@@ -152,9 +150,12 @@ const flightController = {
     flightModel
       .insertFlight(data)
       .then(() => {
-        commonHelper.response(res, data, 201, "Flight has been added")
+        return commonHelper.response(res, data, 201, "Flight has been added")
       })
-      .catch((err) => res.send(err))
+      .catch((err) => {
+        console.log(err)
+        return commonHelper.response(res, null, 500, "Failed to create flight")
+      })
   },
 
   updateFlight: async (req, res) => {
@@ -253,7 +254,7 @@ const flightController = {
       gate: updatedData.gate,
       price: updatedData.price,
     }
-    commonHelper.response(res, responseData, 200, "Edit flight has been successful")
+    return commonHelper.response(res, responseData, 200, "Edit flight has been successful")
   },
 
   deleteFlight: async (req, res) => {
@@ -270,9 +271,11 @@ const flightController = {
       flightModel
         .deleteFlight(id)
         .then((result) => {
-          commonHelper.response(res, result.rows, 200, "Flight has been deleted")
+          return commonHelper.response(res, result.rows, 200, "Flight has been deleted")
         })
-        .catch((err) => res.send(err))
+        .catch((err) =>{
+          return commonHelper.response(res, null, 500, "Failed to delete flight")
+        })
     } catch (err) {
       console.log(err)
     }

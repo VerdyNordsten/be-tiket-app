@@ -15,9 +15,7 @@ const seatController = {
 
       const result = await seatModel.selectAllSeatByFlightId(id_flight, limit, offset, searchParam, sortBY, sort)
       if (result.rowCount === 0) {
-        return res.json({
-          message: "Data not found",
-        })
+        return commonHelper.response(res, null, 404, "Data not found" )
       }
       const {
         rows: [count],
@@ -44,6 +42,7 @@ const seatController = {
       )
     } catch (error) {
       console.log(error)
+      return commonHelper.response(res, null, 500, "Failed to get all seats" )
     }
   },
 
@@ -52,9 +51,7 @@ const seatController = {
       const id = req.params.id
       const { rows, rowCount } = await seatModel.findSeatWithFlight(id)
       if (!rowCount) {
-        return res.json({
-          Message: "Data not found",
-        })
+        return commonHelper.response(res, null, 404, "Data not found" )
       }
       const { id_flight, name_airline, no_seat, type_seat, filled } = rows[0]
       const data = {
@@ -64,11 +61,10 @@ const seatController = {
         type_seat,
         filled,
       }
-      commonHelper.response(res, data, 200, "Get detail seat success")
+      return commonHelper.response(res, data, 200, "Get detail seat success")
     } catch (err) {
-      res.json({
-        message: err.message,
-      })
+      console.log(err)
+      return commonHelper.response(res, null, 500, "Failed to get detail ticket" )
     }
   },
 
@@ -109,13 +105,13 @@ const seatController = {
         }
       }
       if (result.find((r) => r.message === "Seat already exists for this flight")) {
-        commonHelper.response(res, null, 400, "Seat already exists for this flight")
+        return commonHelper.response(res, null, 400, "Seat already exists for this flight")
       } else {
-        commonHelper.response(res, result, 201, "Multiple seats have been created")
+        return commonHelper.response(res, result, 201, "Multiple seats have been created")
       }
     } catch (error) {
       console.error(error)
-      commonHelper.response(res, null, 500, "Internal Server Error")
+      return commonHelper.response(res, null, 500, "Failed to create multiple seats")
     }
   },
 
@@ -150,7 +146,7 @@ const seatController = {
       type_seat: updatedData.type_seat,
       filled: updatedData.filled,
     }
-    commonHelper.response(res, responseData, 200, "Edit seat has been successful")
+    return commonHelper.response(res, responseData, 200, "Edit seat has been successful")
   },
 
   deleteSeat: async (req, res) => {
@@ -165,10 +161,10 @@ const seatController = {
         return commonHelper.response(res, null, 404, "No seats found for this flight")
       }
       const result = await seatModel.deleteSeat(id_flight)
-      commonHelper.response(res, result.rows, 200, "Delete all seat based on id flight have been success")
+      return commonHelper.response(res, result.rows, 200, "Delete all seat based on id flight have been success")
     } catch (error) {
       console.error(error)
-      commonHelper.response(res, null, 500, "Internal Server Error")
+      return commonHelper.response(res, null, 500, "Failed to delete seat")
     }
   },
 }
