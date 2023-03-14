@@ -57,11 +57,12 @@ const flightController = {
       }
   
       const data = result.rows || []
+      totalData = await (await flightModel.countData()).rows[0].count
       const pagination = {
         currentPage: page,
         limit,
-        totalData: data.length,
-        totalPage: Math.ceil(data.length / limit),
+        totalData: totalData,
+        totalPage: Math.ceil(totalData / limit),
       }
       commonHelper.response(
         res,
