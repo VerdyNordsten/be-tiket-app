@@ -1,6 +1,6 @@
 const Pool = require("../config/db")
 
-const selectAllFlight = (limit, offset, sortBY, sort, starting_place, destination_place, type_trip, departure_date, class_flight) => {
+const selectAllFlight = (limit, offset, sortBY, sort, starting_place, destination_place, type_trip, transit, departure_date, class_flight, is_round_trip, filter_luggage, filter_meal, filter_wifi) => {
   let query = `
     SELECT 
       flights.*, 
@@ -9,27 +9,61 @@ const selectAllFlight = (limit, offset, sortBY, sort, starting_place, destinatio
     FROM flights
     INNER JOIN airlines ON flights.id_airline = airlines.id
     WHERE 
+      flights.starting_place ILIKE $1 AND 
+      flights.destination_place ILIKE $2 AND 
+      flights.type_trip = $3 AND 
+      ( 
+        ($4 = 'direct' AND flights.transit = 'direct') OR 
+        ($4 = 'transit' AND flights.transit = 'transit') OR 
+        ($4 = 'direct,transit' AND flights.transit IN ('direct', 'transit')) OR 
+        ($4 = 'transit,direct' AND flights.transit IN ('transit', 'transit')) OR 
+        ($4 IS NULL) 
+      ) AND 
+      (
+        (flights.departure_date = $5) OR 
+        ($5 IS NULL)
+      ) AND 
+      (
+        (flights.class_flight = $6) OR 
+        ($6 IS NULL)
+      )
   `
-  let values = []
-  query += `
-    flights.starting_place ILIKE $1 AND
-    flights.destination_place ILIKE $2 AND
-    flights.type_trip = $3
-  `
-  values = [`%${starting_place}%`, `%${destination_place}%`, type_trip]
-  if (departure_date) {
-    query += ` AND flights.departure_date = $${values.length + 1}`
-    values.push(departure_date)
+
+  const values = [`%${starting_place}%`, `%${destination_place}%`, type_trip, transit || null, departure_date || null, class_flight || null]
+
+  if (filter_luggage !== "") {
+    if (filter_luggage === "luggage") {
+      query += `AND flights.luggage = true `
+    }
   }
-  if (class_flight) {
-    query += ` AND flights.class_flight = $${values.length + 1}`
-    values.push(class_flight)
+  if (filter_luggage === "luggage") {
+    query += `AND flights.luggage = true `
   }
+
+  if (filter_meal !== "") {
+    if (filter_meal === "meal") {
+      query += `AND flights.meal = true `
+    }
+  }
+  if (filter_meal === "meal") {
+    query += `AND flights.meal = true `
+  }
+
+  if (filter_wifi !== "") {
+    if (filter_wifi === "wifi") {
+      query += `AND flights.wifi = true `
+    }
+  }
+  if (filter_wifi === "wifi") {
+    query += `AND flights.wifi = true `
+  }
+
   query += `
     ORDER BY ${sortBY} ${sort}
     LIMIT $${values.length + 1}
     OFFSET $${values.length + 2}
   `
+
   values.push(limit, offset)
   return Pool.query(query, values)
 }
@@ -112,7 +146,7 @@ const countFilteredFlight = (starting_place, destination_place, type_trip, depar
     WHERE 
   `
   let values = []
-  
+
   query += `
     flights.starting_place ILIKE $1 AND
     flights.destination_place ILIKE $2 AND
@@ -142,7 +176,6 @@ const countFilteredFlight = (starting_place, destination_place, type_trip, depar
 
   return Pool.query(query, values)
 }
-
 
 module.exports = {
   selectAllFlight,

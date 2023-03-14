@@ -20,31 +20,28 @@ const flightController = {
       const departure_date = req.query.departure_date || ""
       const class_flight = req.query.class_flight || ""
       const type_trip = req.query.type_trip || TRIP_TYPE.ONE_WAY
-  
-      if (!starting_place || !destination_place) {
-        return commonHelper.response(res, null, 400, "Starting place and destination place are required")
-      }
-  
+      const transit = req.query.transit || ""
+      const filter_luggage = req.query.filter_luggage || ""
+      const filter_meal = req.query.filter_meal || ""
+      const filter_wifi = req.query.filter_luggage || ""
+
       let is_round_trip = false
       if (type_trip === TRIP_TYPE.ROUNDED_TRIP) {
         is_round_trip = true
       }
-  
-      let result = await flightModel.selectAllFlight(limit, offset, sortBY, sort, starting_place, destination_place, type_trip, departure_date, class_flight, is_round_trip)
-  
+
+      let result = await flightModel.selectAllFlight(limit, offset, sortBY, sort, starting_place, destination_place, type_trip, transit, departure_date, class_flight, is_round_trip, filter_luggage, filter_meal, filter_wifi)
       if (!result || result.rows.length === 0) {
         return commonHelper.response(res, null, 404, "Data not found")
       }
-  
+
       const data = result.rows || []
-  
       const pagination = {
         currentPage: page,
         limit,
         totalData: data.length,
         totalPage: Math.ceil(data.length / limit),
       }
-  
       commonHelper.response(
         res,
         data.map((data) => {
@@ -79,7 +76,6 @@ const flightController = {
       return commonHelper.response(res, null, 500, "Failed to get all flights")
     }
   },
-  
 
   getDetailFlight: async (req, res) => {
     try {
