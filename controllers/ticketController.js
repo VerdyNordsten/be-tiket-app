@@ -11,7 +11,7 @@ const ticketController = {
   getAllTickets: async (req, res) => {
     // Setup conditional select
     let queryObject = {
-      id_booking : req.query.id_booking
+      id_passenger : req.query.id_passenger
     }
     // Declare variable for holding query result
     let selectResult
