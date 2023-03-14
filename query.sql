@@ -142,3 +142,10 @@ CREATE TABLE tickets (
         REFERENCES passengers(id)
         ON DELETE CASCADE
 );
+
+-- Creating table
+CREATE TABLE destinations (
+    id CHAR(36) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL, 
+    popularity INT DEFAULT 0
+);
