@@ -1,6 +1,10 @@
 const Pool = require("../config/db")
 
-const selectAllTickets = () => {
+const selectAllTickets = (queryObject) => {
+  let conditional = ``
+  if (queryObject && queryObject.id_passenger){
+    conditional = `WHERE id_passenger='${queryObject.id_passenger}'`
+  }
   return Pool.query("SELECT * FROM tickets ORDER BY code ASC")
 }
 
