@@ -12,6 +12,26 @@ const selectDetailBooking = (queryId) => {
   return Pool.query("SELECT * FROM bookings WHERE id=$1", [queryId])
 }
 
+const selectDetailDestinationByName = (queryName) => {
+  return Pool.query("SELECT * FROM destinations WHERE name=$1", [queryName])
+}
+
+const destinationIncreasePopularity = (queryId) => {
+  return Pool.query("UPDATE destinations SET popularity=popularity+1 WHERE id=$1", [queryId])
+}
+
+const insertDestination = (queryObject) => {
+  const { queryId, name } = queryObject
+  return Pool.query(
+      `INSERT INTO destinations(id, name) ` +
+      `VALUES('${queryId}', '${name}')`
+  );
+}
+
+const selectDetailFlightById = (queryId) => {
+  return Pool.query(`SELECT * FROM flights WHERE id='${queryId}'`)
+}
+
 const insertBooking = (queryObject) => {
   const { queryId, id_user, id_flight, name_contact, email_contact, phone_contact,
           insurance, capacity, status, total_price } = queryObject
@@ -37,6 +57,10 @@ const deleteBooking = (queryId) => {
 module.exports = { 
   selectAllBookings,
   selectDetailBooking,
+  selectDetailFlightById,
+  selectDetailDestinationByName,
+  destinationIncreasePopularity,
+  insertDestination,
   insertBooking,
   updateBooking,
   deleteBooking
