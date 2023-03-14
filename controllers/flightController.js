@@ -64,7 +64,8 @@ const flightController = {
         limit,
         totalData,
         totalPage,
-
+      }
+      
       commonHelper.response(
         res,
         result.rows.map((data) => {
