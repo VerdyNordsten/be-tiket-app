@@ -1,6 +1,7 @@
 // Import model
 const bookingModel = require("../models/bookingModel")
 const passengerModel = require("../models/passengerModel")
+const ticketModel = require("../models/ticketModel")
 
 // Import random id
 const {v4: uuidv4} = require("uuid")
@@ -11,11 +12,20 @@ const commonHelper = require("../helper/common")
 const payBooking = async (bookingId) => {
   let selectPassengerResult
   try {
+    console.log(bookingId)
     const queryObject = {
       id_booking: bookingId
     }
     selectPassengerResult = await passengerModel.selectAllPassengers(queryObject)
-    console.log(selectPassengerResult.rows[0])
+    selectPassengerResult.rows.forEach(async (element)=>{
+      const queryId = uuidv4()
+      const queryObject = {
+        queryId: queryId,
+        id_passenger: element.id,
+        code: uuidv4().slice(0,3)
+      }
+      await ticketModel.insertTicket(queryObject)
+    })
   } catch (error) {
     console.log(error)
   }

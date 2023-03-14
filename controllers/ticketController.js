@@ -9,10 +9,14 @@ const commonHelper = require("../helper/common")
 
 const ticketController = {
   getAllTickets: async (req, res) => {
+    // Setup conditional select
+    let queryObject = {
+      id_booking : req.query.id_booking
+    }
     // Declare variable for holding query result
     let selectResult
     try {
-      selectResult = await ticketModel.selectAllTickets()
+      selectResult = await ticketModel.selectAllTickets(queryObject)
     } catch (error) {
       console.log(error)
       return commonHelper.response(res, null, 500, "Failed to get all tickets" )
