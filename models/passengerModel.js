@@ -16,7 +16,7 @@ const insertPassenger = (queryObject) => {
   const { queryId, id_booking, id_seat, name, category_passenger } = queryObject
   return Pool.query(
       `INSERT INTO passengers(id, id_booking, id_seat, name, category_passenger) ` +
-      `VALUES('${queryId}', '${id_booking}', '${id_seat}' '${name}', '${category_passenger}')`
+      `VALUES('${queryId}', '${id_booking}', '${id_seat}', '${name}', '${category_passenger}')`
   );
 }
 
