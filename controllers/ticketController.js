@@ -47,11 +47,8 @@ const ticketController = {
       return commonHelper.response(res, insertResult.rows, 200, "Ticket added" )
     } catch (error) {
       console.log(error)
-      if (error.detail && error.detail.includes('is not present in table "bookings".')){
-        return commonHelper.response(res, null, 400, "Booking id is not present in table bookings")
-      }
-      if (error.detail && error.detail.includes('is not present in table "seats".')){
-        return commonHelper.response(res, null, 400, "Seat id is not present in table seats")
+      if (error.detail && error.detail.includes('is not present in table "passengers".')){
+        return commonHelper.response(res, null, 400, "Passenger id is not present in table passengers")
       }
       return commonHelper.response(res, null, 500, "Failed to add ticket" )
     }
@@ -69,11 +66,8 @@ const ticketController = {
       return commonHelper.response(res, insertResult.rows, 200, "Ticket edited" )
     } catch (error) {
       console.log(error)
-      if (error.detail && error.detail.includes('is not present in table "bookings".')){
-        return commonHelper.response(res, null, 400, "Booking id is not present in table bookings")
-      }
-      if (error.detail && error.detail.includes('is not present in table "seats".')){
-        return commonHelper.response(res, null, 400, "Seat id is not present in table seats")
+      if (error.detail && error.detail.includes('is not present in table "passengers".')){
+        return commonHelper.response(res, null, 400, "Passenger id is not present in table passengers")
       }
       return commonHelper.response(res, null, 500, "Failed to update ticket" )
     }
