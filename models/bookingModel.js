@@ -1,7 +1,11 @@
 const Pool = require("../config/db")
 
-const selectAllBookings = () => {
-  return Pool.query("SELECT * FROM bookings ORDER BY name_contact ASC")
+const selectAllBookings = (queryObject) => {
+  let conditional = ``
+  if (queryObject && queryObject.id_user){
+    conditional = `WHERE id_user='${queryObject.id_user}'`
+  }
+  return Pool.query(`SELECT * FROM bookings ${conditional} ORDER BY name_contact ASC`)
 }
 
 const selectDetailBooking = (queryId) => {

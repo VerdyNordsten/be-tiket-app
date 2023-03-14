@@ -9,10 +9,14 @@ const commonHelper = require("../helper/common")
 
 const bookingController = {
   getAllBookings: async (req, res) => {
+    // Set query as const
+    const queryObject = {
+      id_user: req.query.id_user
+    }
     // Declare variable for holding query result
     let selectResult
     try {
-      selectResult = await bookingModel.selectAllBookings()
+      selectResult = await bookingModel.selectAllBookings(queryObject)
     } catch (error) {
       console.log(error)
       return commonHelper.response(res, null, 500, "Failed to get all bookings" )
