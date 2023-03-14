@@ -75,7 +75,7 @@ CREATE TABLE bookings (
     name_contact VARCHAR(100) NOT NULL, 
     email_contact VARCHAR(100) NOT NULL,
     phone_contact VARCHAR(100) NOT NULL,
-    insurance BOOLEAN NOT NULL DEFAULT True, 
+    insurance BOOLEAN NOT NULL DEFAULT false, 
     capacity INT DEFAULT 1,
     status INT DEFAULT 0, 
     total_price INT NOT NULL,
