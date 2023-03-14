@@ -48,7 +48,7 @@ const passengerController = {
     req.body.queryId = uuidv4()
     try {
       const insertResult = await passengerModel.insertPassenger(req.body)
-      return commonHelper.response(res, insertResult.rows, 200, "Passenger added" )
+      return commonHelper.response(res, insertResult.rows, 201, "Passenger added" )
     } catch (error) {
       console.log(error)
       if (error.detail && error.detail.includes('is not present in table "bookings".')){
