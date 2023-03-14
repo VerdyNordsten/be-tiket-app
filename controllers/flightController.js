@@ -11,7 +11,7 @@ const flightController = {
         ROUNDED_TRIP: "rounded trip",
       }
       const page = Number(req.query.page) || 1
-      const limit = Number(req.query.limit) || 6
+      const limit = Number(req.query.limit) || 2
       const offset = (page - 1) * limit
       const sortBY = req.query.sortBY || "starting_place"
       const sort = req.query.sort || "ASC"
@@ -35,7 +35,7 @@ const flightController = {
         is_round_trip = true
       }
   
-      let result = await flightModel.selectAllFlight(
+      const result = await flightModel.selectAllFlight(
         limit,
         offset,
         sortBY,
@@ -52,21 +52,22 @@ const flightController = {
         filter_wifi,
         airlines
       )
-      if (!result || result.rows.length === 0) {
+      
+      if (!result || !result.rows || result.rows.length === 0) {
         return commonHelper.response(res, null, 404, "Data not found")
       }
-  
-      const data = result.rows || []
-      totalData = await (await flightModel.countData()).rows[0].count
+      
+      const totalData = result.totalData
+      const totalPage = result.totalPage
       const pagination = {
         currentPage: page,
         limit,
-        totalData: totalData,
-        totalPage: Math.ceil(totalData / limit),
-      }
+        totalData,
+        totalPage,
+
       commonHelper.response(
         res,
-        data.map((data) => {
+        result.rows.map((data) => {
           const dep_time = moment(data.departure_time, "HH:mm")
           const arr_time = moment(data.arrived_time, "HH:mm")
           const duration = moment.duration(arr_time.diff(dep_time))
@@ -98,6 +99,7 @@ const flightController = {
       return commonHelper.response(res, null, 500, "Failed to get all flights")
     }
   },
+
 
   getDetailFlight: async (req, res) => {
     try {

@@ -1,79 +1,121 @@
 const Pool = require("../config/db")
 
-const selectAllFlight = (limit, offset, sortBY, sort, starting_place, destination_place, type_trip, transit, departure_date, class_flight, is_round_trip, filter_luggage, filter_meal, filter_wifi, airlines) => {
-  let query = `
-    SELECT 
-      flights.*, 
-      airlines.name as name_airline,
-      airlines.photo as image_airline
-    FROM flights
-    INNER JOIN airlines ON flights.id_airline = airlines.id
-    WHERE 
-      flights.starting_place ILIKE $1 AND 
-      flights.destination_place ILIKE $2 AND 
-      flights.type_trip = $3 AND 
-      ( 
-        ($4 = 'direct' AND flights.transit = 'direct') OR 
-        ($4 = 'transit' AND flights.transit = 'transit') OR 
-        ($4 = 'direct,transit' AND flights.transit IN ('direct', 'transit')) OR 
-        ($4 = 'transit,direct' AND flights.transit IN ('transit', 'transit')) OR 
-        ($4 IS NULL) 
-      ) AND 
-      (
-        (flights.departure_date = $5) OR 
-        ($5 IS NULL)
-      ) AND 
-      (
-        (flights.class_flight = $6) OR 
-        ($6 IS NULL)
-      )
-  `
+// const selectAllFlight = (limit, offset) => {
+//   let query = `
+//     SELECT
+//       flights.*,
+//       airlines.name as name_airline,
+//       airlines.photo as image_airline
+//     FROM flights
+//     INNER JOIN airlines ON flights.id_airline = airlines.id
+//     LIMIT $1
+//     OFFSET $2
+//   `
+//   const values = [limit, offset]
+//   return Pool.query(query, values)
+// }
 
-  const values = [`%${starting_place}%`, `%${destination_place}%`, type_trip, transit || null, departure_date || null, class_flight || null]
+const selectAllFlight = async (limit, page, sortBY, sort, starting_place, destination_place, type_trip, transit, departure_date, class_flight, is_round_trip, filter_luggage, filter_meal, filter_wifi, airlines) => {
+  try {
+    let query = `
+      SELECT 
+        flights.*, 
+        airlines.name as name_airline,
+        airlines.photo as image_airline
+      FROM flights
+      INNER JOIN airlines ON flights.id_airline = airlines.id
+      WHERE 
+        flights.starting_place ILIKE $1 AND 
+        flights.destination_place ILIKE $2 AND 
+        flights.type_trip = $3 AND 
+        ( 
+          ($4 = 'direct' AND flights.transit = 'direct') OR 
+          ($4 = 'transit' AND flights.transit = 'transit') OR 
+          ($4 = 'direct,transit' AND flights.transit IN ('direct', 'transit')) OR 
+          ($4 = 'transit,direct' AND flights.transit IN ('transit', 'transit')) OR 
+          ($4 IS NULL) 
+        ) AND 
+        (
+          (flights.departure_date = $5) OR 
+          ($5 IS NULL)
+        ) AND 
+        (
+          (flights.class_flight = $6) OR 
+          ($6 IS NULL)
+        )
+    `
 
-  if (filter_luggage !== "") {
+    const values = [`%${starting_place}%`, `%${destination_place}%`, type_trip, transit || null, departure_date || null, class_flight || null]
+
+    if (filter_luggage !== "") {
+      if (filter_luggage === "luggage") {
+        query += `AND flights.luggage = true `
+      }
+    }
     if (filter_luggage === "luggage") {
       query += `AND flights.luggage = true `
     }
-  }
-  if (filter_luggage === "luggage") {
-    query += `AND flights.luggage = true `
-  }
 
-  if (filter_meal !== "") {
+    if (filter_meal !== "") {
+      if (filter_meal === "meal") {
+        query += `AND flights.meal = true `
+      }
+    }
     if (filter_meal === "meal") {
       query += `AND flights.meal = true `
     }
-  }
-  if (filter_meal === "meal") {
-    query += `AND flights.meal = true `
-  }
 
-  if (filter_wifi !== "") {
+    if (filter_wifi !== "") {
+      if (filter_wifi === "wifi") {
+        query += `AND flights.wifi = true `
+      }
+    }
     if (filter_wifi === "wifi") {
       query += `AND flights.wifi = true `
     }
-  }
-  if (filter_wifi === "wifi") {
-    query += `AND flights.wifi = true `
-  }
 
-  if (airlines && airlines.length > 0) {
-    const subquery = `SELECT id FROM airlines WHERE name IN (${airlines.map((airline, index) => `$${values.length + 1 + index}`).join(", ")})`
-    query += `AND flights.id_airline IN (${subquery})`
-    airlines.forEach((airline) => {
-      values.push(airline)
-    })
+    if (airlines && airlines.length > 0) {
+      const subquery = `SELECT id FROM airlines WHERE name IN (${airlines.map((airline, index) => `$${values.length + 1 + index}`).join(", ")})`
+      query += `AND flights.id_airline IN (${subquery})`
+      airlines.forEach((airline) => {
+        values.push(airline)
+      })
+    }
+
+    const countQuery = `
+      SELECT 
+        COUNT(*) as count
+      FROM 
+        (${query}) as flightCount
+    `
+
+    let offset = (page - 1) * limit
+
+    // handle page 1 offset
+    if (offset < 0 && page !== 1) {
+      offset = 0
+    }
+
+    query += `
+      ORDER BY ${sortBY} ${sort}
+      LIMIT $${values.length + 1}
+      OFFSET $${values.length + 2}
+    `
+    values.push(limit, offset)
+
+    const [result, countResult] = await Promise.all([Pool.query(query, values), Pool.query(countQuery, values.slice(0, 6))])
+
+    const totalData = parseInt(countResult.rows[0].count)
+    const totalPage = Math.ceil(totalData / limit)
+
+    return {
+      rows: result.rows,
+      totalData,
+      totalPage,
+    }
+  } catch (error) {
+    console.log(error)
   }
-
-  query += `
-    ORDER BY ${sortBY} ${sort}
-    LIMIT $${values.length + 1}
-    OFFSET $${values.length + 2}
-  `
-
-  values.push(limit, offset)
-  return Pool.query(query, values)
 }
 
 const findFlightWithAirline = (id) => {
