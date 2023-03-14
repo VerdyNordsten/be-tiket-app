@@ -5,7 +5,7 @@ const selectAllTickets = (queryObject) => {
   if (queryObject && queryObject.id_passenger){
     conditional = `WHERE id_passenger='${queryObject.id_passenger}'`
   }
-  return Pool.query("SELECT * FROM tickets ORDER BY code ASC")
+  return Pool.query(`SELECT * FROM tickets ${conditional} ORDER BY code ASC`)
 }
 
 const selectDetailTicket = (queryId) => {
