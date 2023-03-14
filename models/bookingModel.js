@@ -28,6 +28,12 @@ const insertDestination = (queryObject) => {
   );
 }
 
+const updateFilledSeat = (queryId) => {
+  return Pool.query(`
+    UPDATE seats SET filled=true WHERE id='${queryId}'
+  `)
+}
+
 const selectDetailFlightById = (queryId) => {
   return Pool.query(`SELECT * FROM flights WHERE id='${queryId}'`)
 }
@@ -63,5 +69,6 @@ module.exports = {
   insertDestination,
   insertBooking,
   updateBooking,
+  updateFilledSeat,
   deleteBooking
 }

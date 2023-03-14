@@ -25,6 +25,7 @@ const payBooking = async (bookingId) => {
         code: uuidv4().slice(0,3)
       }
       await ticketModel.insertTicket(queryObject)
+      await bookingModel.updateFilledSeat(element.id_seat)
     })
   } catch (error) {
     console.log(error)
