@@ -1,7 +1,11 @@
 const Pool = require("../config/db")
 
-const selectAllPassengers = () => {
-  return Pool.query("SELECT * FROM passengers ORDER BY name ASC")
+const selectAllPassengers = (queryObject) => {
+  let conditional = ``
+  if (queryObject && queryObject.id_booking){
+    conditional = `WHERE id_booking='${queryObject.id_booking}'`
+  }
+  return Pool.query(`SELECT * FROM passengers ${conditional} ORDER BY name ASC`)
 }
 
 const selectDetailPassenger = (queryId) => {
@@ -11,7 +15,7 @@ const selectDetailPassenger = (queryId) => {
 const insertPassenger = (queryObject) => {
   const { queryId, id_booking, id_seat, name, category_passenger } = queryObject
   return Pool.query(
-      `INSERT INTO passengers(id, id_booking, name, category_passenger) ` +
+      `INSERT INTO passengers(id, id_booking, id_seat, name, category_passenger) ` +
       `VALUES('${queryId}', '${id_booking}', '${id_seat}' '${name}', '${category_passenger}')`
   );
 }
