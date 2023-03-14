@@ -50,6 +50,7 @@ const userController = {
       let payload = {
         email: user.email,
         id: user.id, // add the user ID to the payload
+        role: "user"
       }
       user.token = authHelper.generateToken(payload)
       user.refreshToken = authHelper.generateRefreshToken(payload)

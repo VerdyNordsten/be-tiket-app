@@ -1,11 +1,41 @@
 const Pool = require("../config/db")
 
-const selectAllBookings = () => {
-  return Pool.query("SELECT * FROM bookings ORDER BY name_contact ASC")
+const selectAllBookings = (queryObject) => {
+  let conditional = ``
+  if (queryObject && queryObject.id_user){
+    conditional = `WHERE id_user='${queryObject.id_user}'`
+  }
+  return Pool.query(`SELECT * FROM bookings ${conditional} ORDER BY name_contact ASC`)
 }
 
 const selectDetailBooking = (queryId) => {
   return Pool.query("SELECT * FROM bookings WHERE id=$1", [queryId])
+}
+
+const selectDetailDestinationByName = (queryName) => {
+  return Pool.query("SELECT * FROM destinations WHERE name=$1", [queryName])
+}
+
+const destinationIncreasePopularity = (queryId) => {
+  return Pool.query("UPDATE destinations SET popularity=popularity+1 WHERE id=$1", [queryId])
+}
+
+const insertDestination = (queryObject) => {
+  const { queryId, name } = queryObject
+  return Pool.query(
+      `INSERT INTO destinations(id, name) ` +
+      `VALUES('${queryId}', '${name}')`
+  );
+}
+
+const updateFilledSeat = (queryId) => {
+  return Pool.query(`
+    UPDATE seats SET filled=true WHERE id='${queryId}'
+  `)
+}
+
+const selectDetailFlightById = (queryId) => {
+  return Pool.query(`SELECT * FROM flights WHERE id='${queryId}'`)
 }
 
 const insertBooking = (queryObject) => {
@@ -33,7 +63,12 @@ const deleteBooking = (queryId) => {
 module.exports = { 
   selectAllBookings,
   selectDetailBooking,
+  selectDetailFlightById,
+  selectDetailDestinationByName,
+  destinationIncreasePopularity,
+  insertDestination,
   insertBooking,
   updateBooking,
+  updateFilledSeat,
   deleteBooking
 }

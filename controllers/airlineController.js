@@ -133,11 +133,15 @@ const userController = {
     }
     // Update other field
     try {
-      const insertResult = await airlineModel.updateAirline(req.body)
-      return commonHelper.response(res, insertResult.rows, 200, "Airline edited" )
+      const updateResult = await airlineModel.updateAirline(req.body)
+      return commonHelper.response(res, updateResult.rows, 200, "Airline edited" )
     } catch (error) {
       console.log(error)
-      return commonHelper.response(res, null, 500, "Failed to update airline" )
+      if (error.detail && error.detail.includes('already exists.')) {
+        return commonHelper.response(res, null, 400, "Airline name already exist" )
+      } else {
+        return commonHelper.response(res, null, 500, "Failed to update airline" )
+      }
     }
   },
 

@@ -1,5 +1,7 @@
 // Import model
 const bookingModel = require("../models/bookingModel")
+const passengerModel = require("../models/passengerModel")
+const ticketModel = require("../models/ticketModel")
 
 // Import random id
 const {v4: uuidv4} = require("uuid")
@@ -7,12 +9,39 @@ const {v4: uuidv4} = require("uuid")
 // Import Helper for Template Response
 const commonHelper = require("../helper/common")
 
+const payBooking = async (bookingId) => {
+  let selectPassengerResult
+  try {
+    console.log(bookingId)
+    const queryObject = {
+      id_booking: bookingId
+    }
+    selectPassengerResult = await passengerModel.selectAllPassengers(queryObject)
+    selectPassengerResult.rows.forEach(async (element)=>{
+      const queryId = uuidv4()
+      const queryObject = {
+        queryId: queryId,
+        id_passenger: element.id,
+        code: uuidv4().slice(0,3)
+      }
+      await ticketModel.insertTicket(queryObject)
+      await bookingModel.updateFilledSeat(element.id_seat)
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const bookingController = {
   getAllBookings: async (req, res) => {
+    // Set query as const
+    const queryObject = {
+      id_user: req.query.id_user
+    }
     // Declare variable for holding query result
     let selectResult
     try {
-      selectResult = await bookingModel.selectAllBookings()
+      selectResult = await bookingModel.selectAllBookings(queryObject)
     } catch (error) {
       console.log(error)
       return commonHelper.response(res, null, 500, "Failed to get all bookings" )
@@ -47,8 +76,8 @@ const bookingController = {
     // Generate Id
     req.body.queryId = uuidv4()
     try {
-      // const insertResult = await bookingModel.insertBooking(req.body)
-      return commonHelper.response(res, req.body, 200, "Booking added" )
+      const insertResult = await bookingModel.insertBooking(req.body)
+      return commonHelper.response(res, req.body, 201, "Booking added" )
     } catch (error) {
       console.log(error)
       if (error.detail && error.detail.includes('is not present in table "users".')){
@@ -70,10 +99,23 @@ const bookingController = {
     // Set param id as const
     const queryId = req.params.id
     req.body.queryId = queryId
+    let selectResult
+    try {
+      selectResult = await bookingModel.selectDetailBooking(queryId)
+      if (selectResult.rowCount < 1){
+        return commonHelper.response(res, null, 404, "Booking not found" )
+      }
+    } catch (error) {
+      console.log(error)
+      return commonHelper.response(res, null, 500, "Failed to select booking")
+    }
+    const oldStatus = selectResult.rows[0].status
+    const newStatus = req.body.status
     try {
       const insertResult = await bookingModel.updateBooking(req.body)
-      if (insertResult.rowCount < 1){
-        return commonHelper.response(res, null, 404, "Booking not found" )
+      if (newStatus && oldStatus == 0 && newStatus == 1){
+        // const selectFlightResult = await bookingModel.selectDetailFlightById()
+        await payBooking(queryId)
       }
       return commonHelper.response(res, insertResult.rows, 200, "Booking edited" )
     } catch (error) {

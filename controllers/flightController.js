@@ -56,7 +56,7 @@ const flightController = {
       if (!result || !result.rows || result.rows.length === 0) {
         return commonHelper.response(res, null, 404, "Data not found")
       }
-
+      
       const totalData = result.totalData
       const totalPage = result.totalPage
       const pagination = {
@@ -64,7 +64,6 @@ const flightController = {
         limit,
         totalData,
         totalPage,
-      }
 
       commonHelper.response(
         res,

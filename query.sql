@@ -75,7 +75,7 @@ CREATE TABLE bookings (
     name_contact VARCHAR(100) NOT NULL, 
     email_contact VARCHAR(100) NOT NULL,
     phone_contact VARCHAR(100) NOT NULL,
-    insurance BOOLEAN NOT NULL DEFAULT True, 
+    insurance BOOLEAN NOT NULL DEFAULT false, 
     capacity INT DEFAULT 1,
     status INT DEFAULT 0, 
     total_price INT NOT NULL,
@@ -135,7 +135,7 @@ CREATE TABLE passengers (
 -- Creating table
 CREATE TABLE tickets (
     id CHAR(36) PRIMARY KEY,
-    id_passenger CHAR(36) NOT NULL, 
+    id_passenger CHAR(36) UNIQUE NOT NULL, 
     code VARCHAR(20),
     CONSTRAINT fk_passengers_id
         FOREIGN KEY (id_passenger)
