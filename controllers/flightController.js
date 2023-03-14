@@ -24,17 +24,38 @@ const flightController = {
       const filter_luggage = req.query.filter_luggage || ""
       const filter_meal = req.query.filter_meal || ""
       const filter_wifi = req.query.filter_luggage || ""
-
+      let airlines = req.query.airlines || ""
+  
+      if (airlines !== "") {
+        airlines = airlines.split(",")
+      }
+  
       let is_round_trip = false
       if (type_trip === TRIP_TYPE.ROUNDED_TRIP) {
         is_round_trip = true
       }
-
-      let result = await flightModel.selectAllFlight(limit, offset, sortBY, sort, starting_place, destination_place, type_trip, transit, departure_date, class_flight, is_round_trip, filter_luggage, filter_meal, filter_wifi)
+  
+      let result = await flightModel.selectAllFlight(
+        limit,
+        offset,
+        sortBY,
+        sort,
+        starting_place,
+        destination_place,
+        type_trip,
+        transit,
+        departure_date,
+        class_flight,
+        is_round_trip,
+        filter_luggage,
+        filter_meal,
+        filter_wifi,
+        airlines
+      )
       if (!result || result.rows.length === 0) {
         return commonHelper.response(res, null, 404, "Data not found")
       }
-
+  
       const data = result.rows || []
       const pagination = {
         currentPage: page,

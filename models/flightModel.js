@@ -1,6 +1,6 @@
 const Pool = require("../config/db")
 
-const selectAllFlight = (limit, offset, sortBY, sort, starting_place, destination_place, type_trip, transit, departure_date, class_flight, is_round_trip, filter_luggage, filter_meal, filter_wifi) => {
+const selectAllFlight = (limit, offset, sortBY, sort, starting_place, destination_place, type_trip, transit, departure_date, class_flight, is_round_trip, filter_luggage, filter_meal, filter_wifi, airlines) => {
   let query = `
     SELECT 
       flights.*, 
@@ -56,6 +56,14 @@ const selectAllFlight = (limit, offset, sortBY, sort, starting_place, destinatio
   }
   if (filter_wifi === "wifi") {
     query += `AND flights.wifi = true `
+  }
+
+  if (airlines && airlines.length > 0) {
+    const subquery = `SELECT id FROM airlines WHERE name IN (${airlines.map((airline, index) => `$${values.length + 1 + index}`).join(", ")})`
+    query += `AND flights.id_airline IN (${subquery})`
+    airlines.forEach((airline) => {
+      values.push(airline)
+    })
   }
 
   query += `

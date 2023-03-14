@@ -47,7 +47,7 @@ const bookingController = {
     // Generate Id
     req.body.queryId = uuidv4()
     try {
-      const insertResult = await bookingModel.insertBooking(req.body)
+      // const insertResult = await bookingModel.insertBooking(req.body)
       return commonHelper.response(res, req.body, 200, "Booking added" )
     } catch (error) {
       console.log(error)
