@@ -135,7 +135,7 @@ CREATE TABLE passengers (
 -- Creating table
 CREATE TABLE tickets (
     id CHAR(36) PRIMARY KEY,
-    id_passenger CHAR(36) NOT NULL, 
+    id_passenger CHAR(36) UNIQUE NOT NULL, 
     code VARCHAR(20),
     CONSTRAINT fk_passengers_id
         FOREIGN KEY (id_passenger)
