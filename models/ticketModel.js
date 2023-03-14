@@ -9,17 +9,17 @@ const selectDetailTicket = (queryId) => {
 }
 
 const insertTicket = (queryObject) => {
-  const { queryId, id_booking, id_seat, code } = queryObject
+  const { queryId, id_passenger, code } = queryObject
   return Pool.query(
-      `INSERT INTO tickets(id, id_booking, id_seat, code) ` +
-      `VALUES('${queryId}', '${id_booking}', '${id_seat}', '${code}')`
+      `INSERT INTO tickets(id, id_passenger, code) ` +
+      `VALUES('${queryId}', '${id_passenger}', '${code}')`
   );
 }
 
 const updateTicket = (queryObject) => {
-  const { queryId, id_booking, id_seat, code } = queryObject
+  const { queryId, id_passenger, code } = queryObject
   return Pool.query(
-      `UPDATE tickets SET id_booking='${id_booking}', id_seat='${id_seat}',` +
+      `UPDATE tickets SET id_booking='${id_passenger}',` +
       `code='${code}' WHERE id='${queryId}'`
   );
 }

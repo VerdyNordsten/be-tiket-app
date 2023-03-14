@@ -1,3 +1,6 @@
+// Import Helper for Template Response
+const commonHelper = require("../helper/common")
+
 const validateLogin = async (req, res, next) => {
   const { email, password } = req.body
   try {
@@ -13,7 +16,7 @@ const validateLogin = async (req, res, next) => {
     await Promise.all([checkEmail(email), checkPassword(password)])
     next()
   } catch (error) {
-    return res.json({ message: error.message })
+    return commonHelper.response(res, null, 400, error.message)
   }
 }
 
@@ -36,7 +39,7 @@ const validateRegister = async (req, res, next) => {
     await Promise.all([checkNameRegister(name), checkEmailRegister(email), checkPasswordRegister(password)])
     next()
   } catch (error) {
-    return res.json({ message: error.message })
+    return commonHelper.response(res, null, 400, error.message)
   }
 }
 

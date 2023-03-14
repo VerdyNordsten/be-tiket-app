@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken")
-const createError = require("http-errors")
 
 const verifyToken = async (req, res, next) => {
   try {
@@ -11,17 +10,15 @@ const verifyToken = async (req, res, next) => {
       req.payload = decoded
       next()
     } else {
-      return res.status(401).json({
-        message: "Unauthorized, Please provide valid token",
-      })
+      return commonHelper.response(res, null, 401, "Unauthorized, Please provide valid token")
     }
   } catch (error) {
     if (error && error.name === "JsonWebTokenError") {
-      return next(new createError(401, "Token invalid"))
+      return commonHelper.response(res, null, 401, "Token invalid")
     } else if (error && error.name === "TokenExpiredError") {
-      return next(new createError(401, "Token expired"))
+      return commonHelper.response(res, null, 401, "Token expired")
     } else {
-      return next(new createError(401, "Token not active"))
+      return commonHelper.response(res, null, 401, "Token not active")
     }
   }
 }
