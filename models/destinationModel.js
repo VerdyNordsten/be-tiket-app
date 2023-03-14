@@ -1,7 +1,10 @@
 const Pool = require("../config/db")
 
-const selectAllDestinations = () => {
-  return Pool.query("SELECT * FROM destinations ORDER BY popularity ASC")
+const selectAllDestinations = (queryLimit) => {
+  if (!queryLimit){
+    queryLimit = 10
+  }
+  return Pool.query(`SELECT * FROM destinations ORDER BY popularity DESC LIMIT '${queryLimit}'`)
 }
 
 const selectDetailDestination = (queryId) => {

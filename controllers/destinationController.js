@@ -9,10 +9,12 @@ const commonHelper = require("../helper/common")
 
 const destinationController = {
   getAllDestinations: async (req, res) => {
+    // Set params as const
+    const queryLimit = req.query.limit
     // Declare variable for holding query result
     let selectResult
     try {
-      selectResult = await destinationModel.selectAllDestinations()
+      selectResult = await destinationModel.selectAllDestinations(queryLimit)
     } catch (error) {
       console.log(error)
       return commonHelper.response(res, null, 500, "Failed to get all destinations" )
@@ -47,10 +49,11 @@ const destinationController = {
       return commonHelper.response(res, insertResult.rows, 200, "Destination added" )
     } catch (error) {
       console.log(error)
-      if (error.detail && error.detail.includes('is not present in table "passengers".')){
-        return commonHelper.response(res, null, 400, "Passenger id is not present in table passengers")
+      if (error.detail && error.detail.includes('already exists.')) {
+        return commonHelper.response(res, null, 400, "Destination name already exist" )
+      } else {
+        return commonHelper.response(res, null, 500, "Failed to add destination" )
       }
-      return commonHelper.response(res, null, 500, "Failed to add destination" )
     }
   }, 
 
@@ -66,10 +69,11 @@ const destinationController = {
       return commonHelper.response(res, insertResult.rows, 200, "Destination edited" )
     } catch (error) {
       console.log(error)
-      if (error.detail && error.detail.includes('is not present in table "passengers".')){
-        return commonHelper.response(res, null, 400, "Passenger id is not present in table passengers")
+      if (error.detail && error.detail.includes('already exists.')) {
+        return commonHelper.response(res, null, 400, "Destination name already exist" )
+      } else {
+        return commonHelper.response(res, null, 500, "Failed to update destination" )
       }
-      return commonHelper.response(res, null, 500, "Failed to update destination" )
     }
   },
 
