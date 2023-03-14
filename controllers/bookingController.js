@@ -1,11 +1,23 @@
 // Import model
 const bookingModel = require("../models/bookingModel")
+// const passengerModel = require("../models/passengerModel")
 
 // Import random id
 const {v4: uuidv4} = require("uuid")
 
 // Import Helper for Template Response
 const commonHelper = require("../helper/common")
+
+// const payBooking = async (bookingId) => {
+//   let selectPassengerResult
+//   try {
+//     const queryObject = {
+//     }
+//     selectPassengerResult = await passengerModel.selectDetailPassenger()
+//   } catch (error) {
+//     console.log(error)
+//   }
+// }
 
 const bookingController = {
   getAllBookings: async (req, res) => {
@@ -52,7 +64,7 @@ const bookingController = {
     req.body.queryId = uuidv4()
     try {
       const insertResult = await bookingModel.insertBooking(req.body)
-      return commonHelper.response(res, req.body, 200, "Booking added" )
+      return commonHelper.response(res, req.body, 201, "Booking added" )
     } catch (error) {
       console.log(error)
       if (error.detail && error.detail.includes('is not present in table "users".')){
@@ -74,11 +86,24 @@ const bookingController = {
     // Set param id as const
     const queryId = req.params.id
     req.body.queryId = queryId
+    // let selectResult
+    // try {
+    //   selectResult = await bookingModel.selectDetailBooking(queryId)
+    //   if (selectResult.rowCount < 1){
+    //     return commonHelper.response(res, null, 404, "Booking not found" )
+    //   }
+    // } catch (error) {
+    //   console.log(error)
+    //   return commonHelper.response(res, null, 500, "Failed to select booking")
+    // }
+    // const oldStatus = selectResult.rows[0].status
+    // const newStatus = req.body.status
     try {
       const insertResult = await bookingModel.updateBooking(req.body)
-      if (insertResult.rowCount < 1){
-        return commonHelper.response(res, null, 404, "Booking not found" )
-      }
+      // if (newStatus && oldStatus == 0 && newStatus == 1){
+      //   // const selectFlightResult = await bookingModel.selectDetailFlightById()
+      //   await payBooking(queryId)
+      // }
       return commonHelper.response(res, insertResult.rows, 200, "Booking edited" )
     } catch (error) {
       console.log(error)
