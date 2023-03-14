@@ -1,19 +1,36 @@
 const Pool = require("../config/db")
 
-const selectAllFlight = (limit, offset, searchParam, sortBY, sort) => {
-  const query = `
+const selectAllFlight = (limit, offset, sortBY, sort, starting_place, destination_place, type_trip, departure_date, class_flight) => {
+  let query = `
     SELECT 
       flights.*, 
       airlines.name as name_airline,
       airlines.photo as image_airline
     FROM flights
     INNER JOIN airlines ON flights.id_airline = airlines.id
-    WHERE lower(flights.starting_place) LIKE $1
-    ORDER BY ${sortBY} ${sort}
-    LIMIT $2
-    OFFSET $3
+    WHERE 
   `
-  const values = [`%${searchParam}%`, limit, offset]
+  let values = []
+  query += `
+    flights.starting_place ILIKE $1 AND
+    flights.destination_place ILIKE $2 AND
+    flights.type_trip = $3
+  `
+  values = [`%${starting_place}%`, `%${destination_place}%`, type_trip]
+  if (departure_date) {
+    query += ` AND flights.departure_date = $${values.length + 1}`
+    values.push(departure_date)
+  }
+  if (class_flight) {
+    query += ` AND flights.class_flight = $${values.length + 1}`
+    values.push(class_flight)
+  }
+  query += `
+    ORDER BY ${sortBY} ${sort}
+    LIMIT $${values.length + 1}
+    OFFSET $${values.length + 2}
+  `
+  values.push(limit, offset)
   return Pool.query(query, values)
 }
 
@@ -87,6 +104,46 @@ const countData = () => {
   return Pool.query("SELECT COUNT(*) FROM flights")
 }
 
+const countFilteredFlight = (starting_place, destination_place, type_trip, departure_date, class_flight, filter_transit) => {
+  let query = `
+    SELECT 
+      COUNT(*) as count
+    FROM flights
+    WHERE 
+  `
+  let values = []
+  
+  query += `
+    flights.starting_place ILIKE $1 AND
+    flights.destination_place ILIKE $2 AND
+    flights.type_trip = $3
+  `
+  values = [`%${starting_place}%`, `%${destination_place}%`, type_trip]
+
+  if (departure_date) {
+    query += ` AND flights.departure_date = $${values.length + 1}`
+    values.push(departure_date)
+  }
+
+  if (class_flight) {
+    query += ` AND flights.class_flight = $${values.length + 1}`
+    values.push(class_flight)
+  }
+
+  if (filter_transit) {
+    const transitArr = filter_transit.split(",")
+    let transitQuery = ""
+    transitArr.forEach((transit, index) => {
+      transitQuery += `${index === 0 ? "" : " OR "}flights.transit ILIKE $${values.length + index + 1}`
+      values.push(`%${transit}%`)
+    })
+    query += ` AND (${transitQuery})`
+  }
+
+  return Pool.query(query, values)
+}
+
+
 module.exports = {
   selectAllFlight,
   findFlightWithAirline,
@@ -95,4 +152,5 @@ module.exports = {
   deleteFlight,
   findFlightId,
   countData,
+  countFilteredFlight,
 }

@@ -6,30 +6,48 @@ const moment = require("moment")
 const flightController = {
   getAllFlight: async (req, res) => {
     try {
+      const TRIP_TYPE = {
+        ONE_WAY: "one way",
+        ROUNDED_TRIP: "rounded trip",
+      }
       const page = Number(req.query.page) || 1
       const limit = Number(req.query.limit) || 6
       const offset = (page - 1) * limit
       const sortBY = req.query.sortBY || "starting_place"
       const sort = req.query.sort || "ASC"
-      const searchParam = req.query.search ? req.query.search.toLowerCase() : ""
-      const result = await flightModel.selectAllFlight(limit, offset, searchParam, sortBY, sort)
-      if (result.rowCount === 0) {
-        return commonHelper.response(res, null, 404, "Data not found" )
+      const starting_place = req.query.starting_place || ""
+      const destination_place = req.query.destination_place || ""
+      const departure_date = req.query.departure_date || ""
+      const class_flight = req.query.class_flight || ""
+      const type_trip = req.query.type_trip || TRIP_TYPE.ONE_WAY
+  
+      if (!starting_place || !destination_place) {
+        return commonHelper.response(res, null, 400, "Starting place and destination place are required")
       }
-      const {
-        rows: [count],
-      } = await flightModel.countData()
-      const totalData = parseInt(count.count)
-      const totalPage = Math.ceil(totalData / limit)
+  
+      let is_round_trip = false
+      if (type_trip === TRIP_TYPE.ROUNDED_TRIP) {
+        is_round_trip = true
+      }
+  
+      let result = await flightModel.selectAllFlight(limit, offset, sortBY, sort, starting_place, destination_place, type_trip, departure_date, class_flight, is_round_trip)
+  
+      if (!result || result.rows.length === 0) {
+        return commonHelper.response(res, null, 404, "Data not found")
+      }
+  
+      const data = result.rows || []
+  
       const pagination = {
         currentPage: page,
         limit,
-        totalData,
-        totalPage,
+        totalData: data.length,
+        totalPage: Math.ceil(data.length / limit),
       }
+  
       commonHelper.response(
         res,
-        result.rows.map((data) => {
+        data.map((data) => {
           const dep_time = moment(data.departure_time, "HH:mm")
           const arr_time = moment(data.arrived_time, "HH:mm")
           const duration = moment.duration(arr_time.diff(dep_time))
@@ -58,16 +76,17 @@ const flightController = {
       )
     } catch (error) {
       console.log(error)
-      return commonHelper.response(res, null, 500, "Failed to get all flights" )
+      return commonHelper.response(res, null, 500, "Failed to get all flights")
     }
   },
+  
 
   getDetailFlight: async (req, res) => {
     try {
       const id = req.params.id
       const { rows, rowCount } = await flightModel.findFlightWithAirline(id)
       if (!rowCount) {
-        return commonHelper.response(res, null, 404, "Data not found" )
+        return commonHelper.response(res, null, 404, "Data not found")
       }
       const { id_airline, departure_date, departure_time, arrived_date, arrived_time, starting_place, destination_place, transit, luggage, meal, wifi, class_flight, type_trip, capacity, terminal, gate, price, name_airline, image_airline } = rows[0]
       const dep_time = moment(departure_time, "HH:mm")
@@ -166,7 +185,7 @@ const flightController = {
       return commonHelper.response(res, null, 403, "Only Admin are allowed to update Flight")
     }
     const dataPw = await flightModel.findFlightId(id)
-    if (dataPw.rowCount < 1){
+    if (dataPw.rowCount < 1) {
       return commonHelper.response(res, null, 404, "Flight not found")
     }
     let newData = {}
@@ -276,8 +295,8 @@ const flightController = {
         .then((result) => {
           return commonHelper.response(res, result.rows, 200, "Flight has been deleted")
         })
-        .catch((err) =>{
-          return commonHelper.response(res, null, 500, "Failed to delete flight")
+        .catch((err) => {
+          return commonHelper.response(err, null, 500, "Failed to delete flight")
         })
     } catch (err) {
       console.log(err)
