@@ -8,55 +8,93 @@ const bcrypt = require("bcrypt")
 const saltRounds = 10
 
 const adminController = {
-  registerAdmin: async (req, res) => {
+  getAllAdmin: async (req, res) => {
     try {
-      const { username, email, password, phone } = req.body
+      const { role } = req.payload
+      if (role !== "super admin") {
+        return commonHelper.response(res, null, 403, "Only Super Admin are allowed to get all Admin")
+      }
+      let selectResult = await adminModel.getAllAdmin()
+      const adminList = selectResult.rows.map((admin) => {
+        const { password, ...rest } = admin
+        return rest
+      })
+      return commonHelper.response(res, adminList, 200, "Get all admin success")
+    } catch (error) {
+      console.log(error)
+      return commonHelper.response(res, null, 500, "Failed to get all admin")
+    }
+  },
+
+  createAdmin: async (req, res) => {
+    try {
+      const { role } = req.payload
+      if (role !== "super admin") {
+        return commonHelper.response(res, null, 403, "Only Super Admin are allowed to Create User Admin")
+      }
+      const { username, fullname, email, password, phone } = req.body
       const checkEmail = await adminModel.findEmail(email)
       if (checkEmail.rowCount > 0) {
-        return commonHelper.response(res, null, 409, "Email already exist" )
+        return commonHelper.response(res, null, 409, "Email admin already exist")
       }
       const hashPassword = await bcrypt.hash(password, saltRounds)
       const id = uuid.v4()
       const data = {
         id,
         username,
+        fullname,
         email,
         password: hashPassword,
         phone,
       }
-      const result = await adminModel.insertAdmin(data)
-      return commonHelper.response(res, result.rows, 201, "Register admin has been success")
+      const result = await adminModel.createAdmin(data)
+      return commonHelper.response(res, result.rows, 201, "Create admin has been success")
     } catch (err) {
       console.log(err)
-      return commonHelper.response(res, null, 500, "Failed to register" )
+      return commonHelper.response(res, null, 500, "Failed to create admin")
     }
   },
 
   loginAdmin: async (req, res) => {
     try {
-      const { email, password } = req.body
-      const {
-        rows: [user],
-      } = await adminModel.findEmail(email)
-      if (!user) {
-        return commonHelper.response(res, null, 401, "Email is invalid" )
+      const { emailOrUsername, password } = req.body
+      if (!emailOrUsername) {
+        return commonHelper.response(res, null, 400, "Email/Username is required")
       }
-      const isValidPassword = bcrypt.compareSync(password, user.password)
+      let admin
+      if (emailOrUsername.includes("@")) {
+        const {
+          rows: [result],
+        } = await adminModel.findEmail(emailOrUsername)
+        admin = result
+      } else {
+        const {
+          rows: [result],
+        } = await adminModel.findUserName(emailOrUsername)
+        admin = result
+      }
+      if (!admin) {
+        return commonHelper.response(res, null, 401, "Email/Username is invalid")
+      }
+      if (!admin.is_actived) {
+        return commonHelper.response(res, null, 401, "Admin account is not activated")
+      }
+      const isValidPassword = bcrypt.compareSync(password, admin.password)
       if (!isValidPassword) {
-        return commonHelper.response(res, null, 401, "Password is invalid" )
+        return commonHelper.response(res, null, 401, "Password is invalid")
       }
-      delete user.password
+      delete admin.password
       let payload = {
-        email: user.email,
-        id: user.id, // add the user ID to the payload
-        role: user.role,
+        email: admin.email,
+        id: admin.id,
+        role: admin.role,
       }
-      user.token = authHelper.generateToken(payload)
-      user.refreshToken = authHelper.generateRefreshToken(payload)
-      return commonHelper.response(res, user, 201, "Login admin is successful")
+      admin.token = authHelper.generateToken(payload)
+      admin.refreshToken = authHelper.generateRefreshToken(payload)
+      return commonHelper.response(res, admin, 201, "Login admin is successful")
     } catch (err) {
       console.log(err)
-      return commonHelper.response(res, null, 500, "Failed to login" )
+      return commonHelper.response(res, null, 500, "Failed to login")
     }
   },
 
@@ -76,10 +114,34 @@ const adminController = {
   profileAdmin: async (req, res) => {
     const email = req.payload.email
     const {
-      rows: [user],
+      rows: [admin],
     } = await adminModel.findEmail(email)
-    delete user.password
-    return commonHelper.response(res, user, 200, "Get data admin is successful")
+    delete admin.password
+    return commonHelper.response(res, admin, 200, "Get data admin is successful")
+  },
+
+  activedAdmin: async (req, res) => {
+    try {
+      const id = req.params.id
+      const { is_actived } = req.body
+      const { role } = req.payload
+      if (role !== "super admin") {
+        return commonHelper.response(res, null, 403, "Only Super Admin are allowed to activate/deactivate admin accounts")
+      }
+      const admin = await adminModel.findId(id)
+      if (!admin || !admin.rows || admin.rows.length === 0) {
+        return commonHelper.response(res, null, 404, "Admin account not found")
+      }
+      await adminModel.updateAdmin(id, { is_actived })
+      const responseData = {
+        id: id,
+        is_actived: is_actived,
+      }
+      return commonHelper.response(res, responseData, 200, "Admin account is activated/deactivated successfully")
+    } catch (err) {
+      console.log(err)
+      return commonHelper.response(res, null, 500, "Failed to activate/deactivate admin account")
+    }
   },
 }
 

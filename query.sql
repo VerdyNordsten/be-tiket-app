@@ -18,14 +18,27 @@ CREATE TABLE users (
     role VARCHAR(20) DEFAULT 'customer'
 );
 
+-- Create Table Super Admin 
+CREATE TABLE super_admin (
+    id CHAR(36) PRIMARY KEY,
+    username VARCHAR(100),
+    fullname VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    password CHAR(60) NOT NULL,
+    phone VARCHAR(100),
+    role VARCHAR(20) DEFAULT 'super admin'
+);
+
 -- Create Table Admin 
 CREATE TABLE admin (
     id CHAR(36) PRIMARY KEY,
     username VARCHAR(100),
+    fullname VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
     password CHAR(60) NOT NULL,
     phone VARCHAR(100),
-    role VARCHAR(20) DEFAULT 'admin'
+    role VARCHAR(20) DEFAULT 'admin',
+    is_actived BOOLEAN DEFAULT true
 );
 
 -- Delete table if same name exist
