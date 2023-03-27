@@ -12,18 +12,18 @@ const selectDetailDestination = (queryId) => {
 }
 
 const insertDestination = (queryObject) => {
-  const { queryId, name } = queryObject
+  const { queryId, name, description, queryFilename} = queryObject
   return Pool.query(
-      `INSERT INTO destinations(id, name) ` +
-      `VALUES('${queryId}', '${name}')`
+      `INSERT INTO destinations(id, name, description, photo) ` +
+      `VALUES('${queryId}', '${name}', '${description}', '${queryFilename}')`
   );
 }
 
 const updateDestination = (queryObject) => {
-  const { queryId, name, popularity } = queryObject
+  const { queryId, name, popularity, description, queryFilename} = queryObject
   return Pool.query(
       `UPDATE destinations SET name='${name}',` +
-      `popularity='${popularity}' WHERE id='${queryId}'`
+      `popularity='${popularity}', photo='${queryFilename}', description='${description}' WHERE id='${queryId}'`
   );
 }
 
