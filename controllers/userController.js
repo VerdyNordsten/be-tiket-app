@@ -79,7 +79,7 @@ const userController = {
     const {
       rows: [user],
     } = await userModel.findEmail(email)
-    delete user.password
+    // delete user.password
     return commonHelper.response(res, user, 200, "Get data profile is successful")
   },
 
