@@ -22,7 +22,6 @@ CREATE TABLE users (
 CREATE TABLE super_admin (
     id CHAR(36) PRIMARY KEY,
     username VARCHAR(100),
-    fullname VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
     password CHAR(60) NOT NULL,
     phone VARCHAR(100),
