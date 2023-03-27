@@ -4,6 +4,7 @@ CREATE DATABASE ticket_app;
 
 -- Create Table User
 CREATE TYPE title_enum AS ENUM ('mr', 'ms', 'mrs');
+CREATE TYPE type_login AS ENUM ('general', 'google', 'facebook');
 CREATE TABLE users (
     id CHAR(36) PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -15,8 +16,10 @@ CREATE TABLE users (
     title title_enum,
     post_code INT,
     photo VARCHAR(255),
-    role VARCHAR(20) DEFAULT 'customer'
+    role VARCHAR(20) DEFAULT 'customer',
+    type type_login DEFAULT 'general'
 );
+-- ALTER TABLE users ADD type type_login DEFAULT 'general';
 
 -- Create Table Super Admin 
 CREATE TABLE super_admin (

@@ -12,7 +12,7 @@ const { updatePhoto, uploadPhoto, deletePhoto } = require("../config/googleDrive
 const userController = {
   registerUser: async (req, res) => {
     try {
-      const { name, email, password } = req.body
+      const { name, email, password, type } = req.body
       const checkEmail = await userModel.findEmail(email)
       if (checkEmail.rowCount > 0) {
         return commonHelper.response(res, null, 409, "Email already exist" )
@@ -24,6 +24,7 @@ const userController = {
         name,
         email,
         password: hashPassword,
+        type,
       }
       const result = await userModel.insertUser(data)
       return commonHelper.response(res, result.rows, 201, "Register has been success")
@@ -46,7 +47,6 @@ const userController = {
       if (!isValidPassword) {
         return commonHelper.response(res, null, 401, "Password is invalid" )
       }
-      delete user.password
       let payload = {
         email: user.email,
         id: user.id, // add the user ID to the payload
