@@ -10,6 +10,7 @@ const seatRouter = require("./seatRoutes")
 const passengerRouter = require("./passengerRoutes")
 const ticketRouter = require("./ticketRoutes")
 const destinationRouter = require("./destinationRoutes")
+const authSSORouter = require('./authSSORoutes')
 
 router.use("/user", userRouter)
 router.use("/admin", adminRouter)
