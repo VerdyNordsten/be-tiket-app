@@ -159,5 +159,7 @@ CREATE TABLE tickets (
 CREATE TABLE destinations (
     id CHAR(36) PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE, 
-    popularity INT DEFAULT 0
+    popularity INT DEFAULT 0,
+    photo VARCHAR(100),
+    description TEXT
 );
