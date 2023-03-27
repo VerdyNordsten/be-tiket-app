@@ -6,11 +6,12 @@ const CLIENT_URL = `http://localhost:5173`
 
 router.get('/login/success', (req, res) => {
   if (req.user) {
-    const { id, displayName, photos } = req.user
+    const { id, displayName, photos, email } = req.user
     const token = authHelper.generateToken({
       id,
       displayName,
       photos,
+      email,
       role: 'user'
     })
 
