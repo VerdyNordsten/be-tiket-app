@@ -19,17 +19,28 @@ CREATE TABLE users (
     role VARCHAR(20) DEFAULT 'customer',
     type type_login DEFAULT 'general'
 );
-
 -- ALTER TABLE users ADD type type_login DEFAULT 'general';
 
--- Create Table Admin 
-CREATE TABLE admin (
+-- Create Table Super Admin 
+CREATE TABLE super_admin (
     id CHAR(36) PRIMARY KEY,
     username VARCHAR(100),
     email VARCHAR(100) NOT NULL,
     password CHAR(60) NOT NULL,
     phone VARCHAR(100),
-    role VARCHAR(20) DEFAULT 'admin'
+    role VARCHAR(20) DEFAULT 'super admin'
+);
+
+-- Create Table Admin 
+CREATE TABLE admin (
+    id CHAR(36) PRIMARY KEY,
+    username VARCHAR(100),
+    fullname VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    password CHAR(60) NOT NULL,
+    phone VARCHAR(100),
+    role VARCHAR(20) DEFAULT 'admin',
+    is_actived BOOLEAN DEFAULT true
 );
 
 -- Delete table if same name exist

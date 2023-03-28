@@ -47,7 +47,6 @@ const userController = {
       if (!isValidPassword) {
         return commonHelper.response(res, null, 401, "Password is invalid" )
       }
-      delete user.password
       let payload = {
         email: user.email,
         id: user.id, // add the user ID to the payload
@@ -80,7 +79,7 @@ const userController = {
     const {
       rows: [user],
     } = await userModel.findEmail(email)
-    delete user.password
+    // delete user.password
     return commonHelper.response(res, user, 200, "Get data profile is successful")
   },
 
