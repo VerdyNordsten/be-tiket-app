@@ -2,7 +2,7 @@ const passport = require('passport')
 const router = require('express').Router()
 const authHelper = require("../helper/auth")
 
-const CLIENT_URL = `http://localhost:5173`
+const CLIENT_URL = `https://ui-tiket-app.vercel.app/`
 
 router.get('/login/success', (req, res) => {
   console.log(req.user.profile)
