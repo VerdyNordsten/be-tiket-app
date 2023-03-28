@@ -37,7 +37,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: 'https://ui-tiket-app.vercel.app',
   methods: "GET, PUT, POST, DELETE",
   credentials: true
 }))
