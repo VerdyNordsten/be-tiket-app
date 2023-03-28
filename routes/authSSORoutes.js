@@ -2,7 +2,7 @@ const passport = require('passport')
 const router = require('express').Router()
 const authHelper = require("../helper/auth")
 
-const CLIENT_URL = `https://ui-tiket-app.vercel.app`
+const CLIENT_URL = `http://localhost:5173`
 
 router.get('/login/success', (req, res) => {
   console.log(req.user.profile)
@@ -41,7 +41,7 @@ router.get('/login/failed', (req, res) => {
 
 router.get(`/logout`, (req, res) => {
   req.logout()
-  res.redirect(CLIENT_URL)
+  res.redirect()
 })
 
 router.get(`/google`, passport.authenticate('google', { scope: ['profile'] }))
