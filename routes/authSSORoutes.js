@@ -2,10 +2,10 @@ const passport = require('passport')
 const router = require('express').Router()
 const authHelper = require("../helper/auth")
 
-const CLIENT_URL = `https://ui-tiket-app.vercel.app/`
+const CLIENT_URL = `https://buroq.vercel.app`
 
 router.get('/login/success', (req, res) => {
-  console.log(req.user.profile)
+  console.log(data)
 
   if (req.user) {
     const { id, displayName, photo, email } = req.user.profile
@@ -17,7 +17,6 @@ router.get('/login/success', (req, res) => {
       role: 'user'
     })
 
-    console.log(token)
     res.status(200).json({
       success: true,
       message: 'success',

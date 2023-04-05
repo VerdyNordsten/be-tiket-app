@@ -22,7 +22,7 @@ const port = process.env.PORT
 // }))
 
 app.use(session({
-secret: "this_is_a_secret",
+  secret: "this_is_a_secret",
   // store: pgSessionStorage,
   resave: true,
   saveUnitialized: true,
@@ -37,7 +37,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.use(cors({
-  origin: 'https://ui-tiket-app.vercel.app',
+  origin: 'https://buroq.vercel.app',
   methods: "GET, PUT, POST, DELETE",
   credentials: true
 }))
