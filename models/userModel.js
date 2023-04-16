@@ -9,7 +9,7 @@ const findEmail = (email) => {
 }
 
 const insertUser = async (data) => {
-  return await Pool.query("INSERT INTO users (id, name, email, password) VALUES ($1, $2, $3, $4)", [data.id, data.name, data.email, data.password])
+  return await Pool.query("INSERT INTO users (id, name, email, password, type) VALUES ($1, $2, $3, $4, $5)", [data.id, data.name, data.email, data.password, data.type])
 }
 
 const editProfile = (name, password, phone, city, address, title, post_code, photo, id) => {

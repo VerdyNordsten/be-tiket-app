@@ -4,6 +4,7 @@ CREATE DATABASE ticket_app;
 
 -- Create Table User
 CREATE TYPE title_enum AS ENUM ('mr', 'ms', 'mrs');
+CREATE TYPE type_login AS ENUM ('general', 'google', 'facebook');
 CREATE TABLE users (
     id CHAR(36) PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -15,17 +16,31 @@ CREATE TABLE users (
     title title_enum,
     post_code INT,
     photo VARCHAR(255),
-    role VARCHAR(20) DEFAULT 'customer'
+    role VARCHAR(20) DEFAULT 'customer',
+    type type_login DEFAULT 'general'
+);
+-- ALTER TABLE users ADD type type_login DEFAULT 'general';
+
+-- Create Table Super Admin 
+CREATE TABLE super_admin (
+    id CHAR(36) PRIMARY KEY,
+    username VARCHAR(100),
+    email VARCHAR(100) NOT NULL,
+    password CHAR(60) NOT NULL,
+    phone VARCHAR(100),
+    role VARCHAR(20) DEFAULT 'super admin'
 );
 
 -- Create Table Admin 
 CREATE TABLE admin (
     id CHAR(36) PRIMARY KEY,
     username VARCHAR(100),
+    fullname VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
     password CHAR(60) NOT NULL,
     phone VARCHAR(100),
-    role VARCHAR(20) DEFAULT 'admin'
+    role VARCHAR(20) DEFAULT 'admin',
+    is_actived BOOLEAN DEFAULT true
 );
 
 -- Delete table if same name exist
@@ -147,5 +162,7 @@ CREATE TABLE tickets (
 CREATE TABLE destinations (
     id CHAR(36) PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE, 
-    popularity INT DEFAULT 0
+    popularity INT DEFAULT 0,
+    photo VARCHAR(100),
+    description TEXT
 );
