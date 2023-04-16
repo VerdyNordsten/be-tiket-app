@@ -176,13 +176,7 @@ ORIGIN_DOMAIN
 SECRET_KEY_JWT
 ```
 
-## Endpoint List
-
-[![Run in Postman](https://run.pstmn.io/button.svg)]
-<!-- (https://documenter.getpostman.com/view/23292228/2s93RUvsMo) -->
-
 <!-- CONTRIBUTING -->
-
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
