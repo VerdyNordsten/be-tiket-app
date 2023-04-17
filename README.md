@@ -200,7 +200,7 @@ Contributions are what make the open source community such an amazing place to b
 <center>
   <table align="center">
     <tr >
-      <th >Frontend Developer / Project Manager</th>
+      <th >Fullstack Developer / Project Manager</th>
       <th >Frontend Developer</th>
       <th >Frontend Developer</th>
       <th >Backend Developer</th>
