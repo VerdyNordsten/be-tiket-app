@@ -209,31 +209,31 @@ Contributions are what make the open source community such an amazing place to b
     <tr >
       <td align="center">
         <a href="https://github.com/mhmdiamd">
-          <img width="200"  src="./documentation/ilham.jpg" alt="Ikhlasul Kamal Irmansyah"><br/>
+          <img width="200"  src="./documentation/member/ilham.jpg" alt="Ikhlasul Kamal Irmansyah"><br/>
           <b>Muhamad Ilham Darmawan</b>
         </a>
       </td>
       <td align="center">
         <a href="https://github.com/Dhimasswara">
-          <img width="200"  src="./documentation/dhimas.png" alt="Alif Anke Bima Putra"><br/>
+          <img width="200"  src="./documentation/member/dhimas.png" alt="Alif Anke Bima Putra"><br/>
           <b>Dhimas Pandu Yogaswara</b>
         </a>
       </td>
       <td align="center">
         <a href="https://github.com/Shaniara28">
-          <img width="200"  src="./documentation/shania.png" alt="Andiko Oktavianto"><br/>
+          <img width="200"  src="./documentation/member/shania.png" alt="Andiko Oktavianto"><br/>
           <b>Shania Rizky Agustin</b>
         </a>
       </td>
       <td align="center">
         <a href="https://github.com/VerdyNordsten">
-          <img width="200"   src="./documentation/verdy.png" alt="Muhamad Ilham Darmawan"><br/>
+          <img width="200"   src="./documentation/member/verdy.png" alt="Muhamad Ilham Darmawan"><br/>
           <b>Verdy Prido Lughara</b>
         </a>
       </td>
       <td align="center">
         <a href="https://github.com/ikkair">
-          <img width="200"  src="./documentation/kamal.png" alt="Dhimas Pandu Yogaswara"><br/>
+          <img width="200"  src="./documentation/member/kamal.png" alt="Dhimas Pandu Yogaswara"><br/>
           <b>Ikhlasul Kamal Irmansyah</b>
         </a>
       </td>
