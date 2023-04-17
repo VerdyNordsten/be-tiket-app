@@ -5,7 +5,7 @@
 </div>
   <h3 align="center">Backend BuroQ</h3>
   <p align="center">
-    <a href="https://github.com/mhmdiamd/be-tiket-app"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/mhmdiamd/restapi-tiket-app"><strong>Explore the docs »</strong></a>
     <br />
     <a href="https://be-tiket-app.up.railway.app">View Demo</a>
     ·
@@ -112,7 +112,7 @@ API endpoint list are also available as published postman documentation
 - Clone This Back End Repo
 
 ```
-git clone https://github.com/ikkair/be-tiket-app.git
+git clone https://github.com/mhmdiamd/be-tiket-app.git
 ```
 
 - Go To Folder Repo
@@ -189,7 +189,7 @@ Contributions are what make the open source community such an amazing place to b
 
 ## Related Project
 
-:rocket: [`Backend BuroQ`](https://github.com/ikkair/be-tiket-app)
+:rocket: [`Backend BuroQ`](https://github.com/mhmdiamd/restapi-tiket-app)
 
 :rocket: [`Frontend BuroQ`](https://github.com/mhmdiamd/ui-tiket-app)
 
@@ -242,5 +242,5 @@ Contributions are what make the open source community such an amazing place to b
 </center>
 
 
-Project Link: [https://github.com/ikkair/be-tiket-app/](https://github.com/ikkair/be-tiket-app)
+Project Link: [https://github.com/mhmdiamd/restapi-tiket-app/](https://github.com/mhmdiamd/restapi-tiket-app)
 
