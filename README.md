@@ -209,7 +209,7 @@ Contributions are what make the open source community such an amazing place to b
     <tr >
       <td align="center">
         <a href="https://github.com/mhmdiamd">
-          <img width="200"  src="./documentation/ilham.jpg" alt="Ikhlasul Kamal Irmansyah"><br/>
+          <img width="200"  src="./documentation/ilham.png" alt="Ikhlasul Kamal Irmansyah"><br/>
           <b>Muhamad Ilham Darmawan</b>
         </a>
       </td>
