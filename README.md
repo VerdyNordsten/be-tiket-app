@@ -102,7 +102,7 @@ Documentation files are provided in the [documentation](./documentation) folder
 
 API endpoint list are also available as published postman documentation
 
-[![Run in Postman](https://run.pstmn.io/button.svg)]()
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://documenter.getpostman.com/view/26297454/2s93XyUPAS#045eda52-1002-411b-b792-1b447a208b0a)
 
 - [Node.js](https://nodejs.org/en/)
 - [Postman](https://www.getpostman.com/) for testing
@@ -200,7 +200,7 @@ Contributions are what make the open source community such an amazing place to b
 <center>
   <table align="center">
     <tr >
-      <th >Frontend Developer / Project Manager</th>
+      <th >Fullstack Developer / Project Manager</th>
       <th >Frontend Developer</th>
       <th >Frontend Developer</th>
       <th >Backend Developer</th>
@@ -209,7 +209,7 @@ Contributions are what make the open source community such an amazing place to b
     <tr >
       <td align="center">
         <a href="https://github.com/mhmdiamd">
-          <img width="200"  src="./documentation/ilham.jpg" alt="Ikhlasul Kamal Irmansyah"><br/>
+          <img width="200"  src="./documentation/ilham.png" alt="Ikhlasul Kamal Irmansyah"><br/>
           <b>Muhamad Ilham Darmawan</b>
         </a>
       </td>
