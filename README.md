@@ -102,7 +102,7 @@ Documentation files are provided in the [documentation](./documentation) folder
 
 API endpoint list are also available as published postman documentation
 
-[![Run in Postman](https://run.pstmn.io/button.svg)]()
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://documenter.getpostman.com/view/26297454/2s93XyUPAS#045eda52-1002-411b-b792-1b447a208b0a)
 
 - [Node.js](https://nodejs.org/en/)
 - [Postman](https://www.getpostman.com/) for testing
