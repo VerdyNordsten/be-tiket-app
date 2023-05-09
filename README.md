@@ -191,7 +191,7 @@ Contributions are what make the open source community such an amazing place to b
 
 :rocket: [`Backend BuroQ`](https://github.com/ikkair/be-tiket-app)
 
-:rocket: [`Frontend BuroQ`](https://github.com/mhmdiamd/ui-tiket-app)
+:rocket: [`Frontend BuroQ`](https://github.com/ikkair/ui-tiket-app)
 
 :rocket: [`Demo BuroQ`](https://buroq.vercel.app/)
 
