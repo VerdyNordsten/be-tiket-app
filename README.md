@@ -5,9 +5,9 @@
 </div>
   <h3 align="center">Backend BuroQ</h3>
   <p align="center">
-    <a href="https://github.com/mhmdiamd/be-tiket-app"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/VerdyNordsten/buroq_backend"><strong>Explore the docs »</strong></a>
     <br />
-    <a href="https://be-tiket-app.up.railway.app">View Demo</a>
+    <a href="https://buroq-backend.up.railway.app">View Demo</a>
     ·
   </p>
 </p>
@@ -189,11 +189,11 @@ Contributions are what make the open source community such an amazing place to b
 
 ## Related Project
 
-:rocket: [`Backend BuroQ`](https://github.com/ikkair/be-tiket-app)
+:rocket: [`Backend BuroQ`](https://github.com/VerdyNordsten/buroq_backend)
 
-:rocket: [`Frontend BuroQ`](https://github.com/ikkair/ui-tiket-app)
+:rocket: [`Frontend BuroQ`](https://github.com/VerdyNordsten/buroq_frontend)
 
-:rocket: [`Demo BuroQ`](https://buroq.vercel.app/)
+:rocket: [`Demo BuroQ`](https://buroq.digty.co.id/)
 
 ## Meet The Team Members
 
@@ -209,31 +209,31 @@ Contributions are what make the open source community such an amazing place to b
     <tr >
       <td align="center">
         <a href="https://github.com/mhmdiamd">
-          <img width="200"  src="./documentation/ilham.png" alt="Ikhlasul Kamal Irmansyah"><br/>
+          <img width="200"  src="./documentation/ilham.png" alt="Muhamad Ilham Darmawan"><br/>
           <b>Muhamad Ilham Darmawan</b>
         </a>
       </td>
       <td align="center">
         <a href="https://github.com/Dhimasswara">
-          <img width="200"  src="./documentation/dhimas.png" alt="Alif Anke Bima Putra"><br/>
+          <img width="200"  src="./documentation/dhimas.png" alt="Dhimas Pandu Yogaswara"><br/>
           <b>Dhimas Pandu Yogaswara</b>
         </a>
       </td>
       <td align="center">
         <a href="https://github.com/Shaniara28">
-          <img width="200"  src="./documentation/shania.png" alt="Andiko Oktavianto"><br/>
+          <img width="200"  src="./documentation/shania.png" alt="Shania Rizky Agustin"><br/>
           <b>Shania Rizky Agustin</b>
         </a>
       </td>
       <td align="center">
         <a href="https://github.com/VerdyNordsten">
-          <img width="200"   src="./documentation/verdy.png" alt="Muhamad Ilham Darmawan"><br/>
-          <b>Verdy Prido Lughara</b>
+          <img width="200"   src="./documentation/verdy.png" alt="Verdy Prido Lugara"><br/>
+          <b>Verdy Prido Lugara</b>
         </a>
       </td>
       <td align="center">
         <a href="https://github.com/ikkair">
-          <img width="200"  src="./documentation/kamal.png" alt="Dhimas Pandu Yogaswara"><br/>
+          <img width="200"  src="./documentation/kamal.png" alt="Ikhlasul Kamal Irmansyah"><br/>
           <b>Ikhlasul Kamal Irmansyah</b>
         </a>
       </td>
@@ -242,5 +242,5 @@ Contributions are what make the open source community such an amazing place to b
 </center>
 
 
-Project Link: [https://github.com/ikkair/be-tiket-app/](https://github.com/ikkair/be-tiket-app)
+Project Link: [https://github.com/VerdyNordsten/buroq_backend](https://github.com/VerdyNordsten/buroq_backend)
 
