@@ -112,13 +112,13 @@ API endpoint list are also available as published postman documentation
 - Clone This Back End Repo
 
 ```
-git clone https://github.com/ikkair/be-tiket-app.git
+git clone https://github.com/VerdyNordsten/buroq_backend.git
 ```
 
 - Go To Folder Repo
 
 ```
-cd be-tiket-app
+cd buroq_backend
 ```
 
 - Install Module
