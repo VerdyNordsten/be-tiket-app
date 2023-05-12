@@ -37,10 +37,10 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.use(cors({
-  origin: 'https://buroq.vercel.app',
+  origin: ['https://buroq.vercel.app', 'https://buroq.digty.co.id'],
   methods: "GET, PUT, POST, DELETE",
   credentials: true
-}))
+}));
 
 app.use(express.json())
 app.use(morgan("dev"))
